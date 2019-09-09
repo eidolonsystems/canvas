@@ -1,20 +1,29 @@
 import * as React from 'react';
-import { Edge } from "./edge";
-import { Node } from "./node";
+import { Edge } from './edge';
+import { Node } from './node';
+import { Scene } from './scene';
 
-export class Canvas extends React.Component {
+interface Properties {
+  scene: Scene;
+}
+
+export class Canvas extends React.Component<Properties> {
   public render(): JSX.Element {
     return (
       <canvas ref={(thing) => this.canvasRef = thing}/>);
   }
 
   public componentDidMount() {
-    const node1 = new Node('s1', '#1cd2ff', {x: 10, y: 10} );
-    const node2 = new Node('s2', '#ff7da6', {x: 50, y: 90});
-    const edge = new Edge('e1', node1, node2);
-    this.drawCircle(node1);
-    this.drawCircle(node2);
-    this.drawLine(edge);
+    this.drawMachine();
+  }
+
+  private drawMachine() {
+    for(const edge of this.props.scene.edges) {
+      this.drawLine(edge);
+    }
+    for(const node of this.props.scene.nodes) {
+      this.drawCircle(node);
+    }
   }
 
   private drawCircle(node: Node) {
