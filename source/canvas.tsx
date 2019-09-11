@@ -78,7 +78,21 @@ export class Canvas extends React.Component<Properties> {
     ctx.lineWidth = 1;
     ctx.strokeStyle = 'black';
     ctx.moveTo(edge.tail.position.x, edge.tail.position.y);
-    ctx.lineTo(edge.head.position.x, edge.head.position.y);
+    const tail = edge.tail.position;
+    const head = edge.head.position;
+    const magnitude = this.computeMagnitude(head, tail);
+    const unitVector = {
+      x: (head.x - tail.x) / magnitude,
+      y: (head.y - tail.y)/magnitude};
+    let point1 = {x: 0, y: 0};
+    const intersection = this.computeMagnitude(head, tail) - Canvas.radius;
+    if(intersection >= 0) {
+      point1 = {
+        x: tail.x + (intersection * unitVector.x),
+        y: tail.y + (intersection * unitVector.y)
+      };
+    }
+    ctx.lineTo(point1.x, point1.y);
     ctx.stroke();
     ctx.closePath();
     this.drawTriangle(edge);
