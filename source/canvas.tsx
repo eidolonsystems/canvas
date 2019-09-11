@@ -70,14 +70,12 @@ export class Canvas extends React.Component<Properties> {
   private drawTriangle(edge: Edge) {
     const tail = edge.tail.position;
     const head = edge.head.position;
-
-    const magnitude = Math.sqrt(Math.pow((head.x - tail.x), 2) +
-      Math.pow((head.y - tail.y), 2));
-    const unitVector = {x: (head.x - tail.x) / magnitude,
+    const magnitude = this.computeMagnitude(head, tail);
+    const unitVector = {
+      x: (head.x - tail.x) / magnitude,
       y: (head.y - tail.y)/magnitude};
     let point1 = {x: 0, y: 0};
-    const intersection =
-      this.distanceBetweenPoints(head, tail) - Canvas.radius;
+    const intersection = this.computeMagnitude(head, tail) - Canvas.radius;
     if(intersection <= 0) {
       return;
     } else {
@@ -121,7 +119,7 @@ export class Canvas extends React.Component<Properties> {
     ctx.closePath();
   }
 
-  private distanceBetweenPoints(point1: Position, point2: Position) {
+  private computeMagnitude(point1: Position, point2: Position) {
     return Math.sqrt(Math.pow((point1.x - point2.x), 2) +
       Math.pow((point1.y - point2.y), 2));
   }

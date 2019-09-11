@@ -11,5 +11,4 @@ const edge = new Edge('e1', node1, node2);
 const scene = new Scene([node1, node2], [edge]);
 
 ReactDOM.render(
-  <Canvas scene={scene}/>,
-  document.getElementById('main'));
+  <Canvas scene={scene}/>, document.getElementById('main'));

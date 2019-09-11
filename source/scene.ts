@@ -1,5 +1,5 @@
-import { Edge } from "./edge";
-import { Node } from "./node";
+import { Edge } from './edge';
+import { Node } from './node';
 
 export class Scene {
   constructor(nodes: Node[], edges: Edge[]) {
