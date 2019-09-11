@@ -22,9 +22,11 @@ export class Canvas extends React.Component<Properties> {
   public componentDidMount() {
     this.drawMachine();
     this.machineState = 'rest';
+    this.isMouseDown = false;
     this.canvasRef.addEventListener('pointerdown', this.onMouseDown.bind(this));
     this.canvasRef.addEventListener('pointerup', this.onMouseUp.bind(this));
     this.canvasRef.addEventListener('pointermove', this.onMouseMove.bind(this));
+    window.addEventListener('keydown', this.onKeyDown.bind(this));
   }
 
   public componentWillUnmount() {
@@ -33,6 +35,7 @@ export class Canvas extends React.Component<Properties> {
     this.canvasRef.removeEventListener('pointerup', this.onMouseUp.bind(this));
     this.canvasRef.removeEventListener('pointermove',
       this.onMouseMove.bind(this));
+    window.removeEventListener('keydown', this.onKeyDown.bind(this));
   }
 
   private drawMachine() {
@@ -54,6 +57,14 @@ export class Canvas extends React.Component<Properties> {
     ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.closePath();
+    if(this.currentNode === node) {
+    ctx.beginPath();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'red';
+    ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.closePath();
+    }
     ctx.beginPath();
     ctx.font = '12px Arial';
     ctx.fillStyle = 'black';
@@ -64,6 +75,7 @@ export class Canvas extends React.Component<Properties> {
   private drawArrow(edge: Edge) {
     const ctx = this.canvasRef.getContext('2d');
     ctx.beginPath();
+    ctx.lineWidth = 1;
     ctx.strokeStyle = 'black';
     ctx.moveTo(edge.tail.position.x, edge.tail.position.y);
     ctx.lineTo(edge.head.position.x, edge.head.position.y);
@@ -136,7 +148,7 @@ export class Canvas extends React.Component<Properties> {
   }
 
   private getNode(x: number, y: number) {
-    for(const node of this.props.scene.nodes) {
+    for(const node of this.props.scene.nodes.reverse()) {
       if(Math.pow(x - node.position.x, 2) + Math.pow(y - node.position.y, 2) <=
         Math.pow(Canvas.radius, 2)) {
         return node;
@@ -145,6 +157,7 @@ export class Canvas extends React.Component<Properties> {
   }
 
   private onMouseDown(event: PointerEvent) {
+    this.isMouseDown = true;
     if(this.machineState === 'rest') {
       this.currentNode = this.getNode(event.offsetX, event.offsetY);
       this.restState();
@@ -152,8 +165,8 @@ export class Canvas extends React.Component<Properties> {
   }
 
   private onMouseUp(event: PointerEvent) {
+    this.isMouseDown = false;
     if(this.machineState === 'repositioning') {
-      this.currentNode = null;
       this.restState();
     }
   }
@@ -165,12 +178,22 @@ export class Canvas extends React.Component<Properties> {
     }
   }
 
+  private onKeyDown(event: KeyboardEvent) {
+    console.log('key down!');
+    if(event.key === 'Delete' || event.key === 'Backspace') {
+      console.log('deleeeeeteeee');
+      if(this.currentNode !== null) {
+        console.log(this.currentNode);
+        this.props.scene.deleteNode(this.currentNode);
+        this.reDraw();
+      }
+    }
+  }
+
   private restState() {
     this.machineState = 'rest';
-    if(this.currentNode) {
+    if(this.currentNode && this.isMouseDown) {
       this.repositioningState();
-    } else {
-      this.currentNode = null;
     }
   }
 
@@ -182,7 +205,8 @@ export class Canvas extends React.Component<Properties> {
   private machineState: string;
   private canvasRef: HTMLCanvasElement;
   private currentNode: Node;
-  private static radius = 20;
+  private isMouseDown: boolean;
+  private static radius = 30;
   private static arrowLenght = 10;
   private static arrowWidth = 5;
 }

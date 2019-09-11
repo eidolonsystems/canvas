@@ -19,6 +19,17 @@ export class Scene {
     this._nodes.push(node);
   }
 
+  public deleteNode(nodeToRemove: Node): void {
+    for(let i = 0; i < this._nodes.length ; ++i) {
+      if(this._nodes[i].name === nodeToRemove.name &&
+          this._nodes[i].color === nodeToRemove.color &&
+          this._nodes[i].position.x === nodeToRemove.position.x &&
+          this._nodes[i].position.y === nodeToRemove.position.y) {
+        this._nodes.splice(i, 1);
+      }
+    }
+  }
+
   private _nodes: Node[];
   private _edges: Edge[];
 }
