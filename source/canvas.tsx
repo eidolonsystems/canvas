@@ -5,14 +5,16 @@ import { Scene } from './scene';
 
 interface Properties {
   scene: Scene;
+  width: number;
+  height: number;
 }
 
 export class Canvas extends React.Component<Properties> {
   public render(): JSX.Element {
     return (
       <canvas ref={(thing) => this.canvasRef = thing}
-          height={500}
-          width={600}>
+          height={this.props.height}
+          width={this.props.width}>
         {'Your browser does not support HTML5 Canvas.'}
       </canvas>);
   }
@@ -34,6 +36,9 @@ export class Canvas extends React.Component<Properties> {
   }
 
   private drawMachine() {
+    const ctx = this.canvasRef.getContext('2d');
+    ctx.fillStyle = '#f2f2f2';
+    ctx.fillRect(0, 0, this.canvasRef.width, this.canvasRef.height);
     for(const edge of this.props.scene.edges) {
       this.drawArrow(edge);
     }
@@ -124,7 +129,7 @@ export class Canvas extends React.Component<Properties> {
       Math.pow((point1.y - point2.y), 2));
   }
 
-  private reDraw() {
+  public reDraw() {
     const ctx = this.canvasRef.getContext('2d');
     ctx.clearRect(0, 0, this.canvasRef.width, this.canvasRef.height);
     this.drawMachine();

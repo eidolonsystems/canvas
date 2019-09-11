@@ -15,6 +15,10 @@ export class Scene {
     return this._edges.slice();
   }
 
+  public addNode(node: Node): void {
+    this._nodes.push(node);
+  }
+
   private _nodes: Node[];
   private _edges: Edge[];
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Canvas } from './canvas';
+import { CanvasControlPanel } from './canvas_control_panel';
 import { Edge } from './edge';
 import { Node } from './node';
 import { Scene } from './scene';
@@ -11,4 +12,4 @@ const edge = new Edge('e1', node1, node2);
 const scene = new Scene([node1, node2], [edge]);
 
 ReactDOM.render(
-  <Canvas scene={scene}/>, document.getElementById('main'));
+  <CanvasControlPanel scene={scene}/>, document.getElementById('main'));
