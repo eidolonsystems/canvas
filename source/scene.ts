@@ -38,6 +38,13 @@ export class Scene {
     }
   }
 
+  public getRandomNode(): Node {
+    const random = 
+      (Math.random() * (this._nodes.length - 1)) % (this._nodes.length - 1);
+    return this._nodes.slice(random, random +1)[0];
+  }
+
+
   private _nodes: Node[];
   private _edges: Edge[];
   private _maxNodeID: number;

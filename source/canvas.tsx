@@ -27,6 +27,9 @@ export class Canvas extends React.Component<Properties> {
     this.drawMachine();
     this.machineState = 'rest';
     this.isMouseDown = false;
+    this.currentNode = null;
+    this.previousNode = null;
+    this.currentArrow = null;
     this.canvasRef.addEventListener('pointerdown', this.onMouseDown.bind(this));
     this.canvasRef.addEventListener('pointerup', this.onMouseUp.bind(this));
     this.canvasRef.addEventListener('pointermove', this.onMouseMove.bind(this));
@@ -62,12 +65,19 @@ export class Canvas extends React.Component<Properties> {
     ctx.fill();
     ctx.closePath();
     if(this.currentNode === node) {
-    ctx.beginPath();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = 'red';
-    ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.closePath();
+      ctx.beginPath();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#ff390d';
+      ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.closePath();
+    } else if(this.previousNode === node) {
+      ctx.beginPath();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#c70404';
+      ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.closePath();
     }
     ctx.beginPath();
     ctx.font = '12px Arial';
@@ -165,6 +175,12 @@ export class Canvas extends React.Component<Properties> {
     this.drawMachine();
   }
 
+  public clearSelected() {
+    this.currentNode = null;
+    this.previousNode = null;
+    this.drawMachine();
+  }
+
   private getNode(x: number, y: number) {
     for(const node of this.props.scene.nodes.reverse()) {
       if(Math.pow(x - node.position.x, 2) + Math.pow(y - node.position.y, 2) <=
@@ -177,7 +193,13 @@ export class Canvas extends React.Component<Properties> {
   private onMouseDown(event: PointerEvent) {
     this.isMouseDown = true;
     if(this.machineState === 'rest') {
-      this.currentNode = this.getNode(event.offsetX, event.offsetY);
+      const newNode = this.getNode(event.offsetX, event.offsetY);
+      if(newNode === null) {
+        this.clearSelected();
+      } else {
+        this.previousNode = this.currentNode;
+        this.currentNode = newNode;
+      }
       this.reDraw();
       this.restState();
     }
@@ -224,6 +246,8 @@ export class Canvas extends React.Component<Properties> {
   private machineState: string;
   private canvasRef: HTMLCanvasElement;
   private currentNode: Node;
+  private previousNode: Node;
+  private currentArrow: Node;
   private isMouseDown: boolean;
   private static radius = 30;
   private static arrowLenght = 10;
