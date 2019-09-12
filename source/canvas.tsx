@@ -86,7 +86,7 @@ export class Canvas extends React.Component<Properties> {
       y: (head.y - tail.y)/magnitude};
     let point1 = {x: 0, y: 0};
     const intersection = this.computeMagnitude(head, tail) - Canvas.radius;
-    if(intersection >= 0) {
+    if(true) {
       point1 = {
         x: tail.x + (intersection * unitVector.x),
         y: tail.y + (intersection * unitVector.y)
