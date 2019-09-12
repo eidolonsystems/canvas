@@ -17,8 +17,8 @@ export class CanvasControlPanel extends React.Component<Properties> {
             width={500}
             ref={(thing) => this.canvasRef = thing}/>
         <button onClick={this.onAddNodeClick.bind(this)}>Add Node</button>
-        <button onClick={this.onAddEdgeClick.bind(this)}>Add Edge</button>
         <button onClick={this.onConnectEdges.bind(this)}>Add Edge</button>
+        <button onClick={this.onRemoveEdge.bind(this)}>Remove Edge</button>
       </div>);
   }
 
@@ -38,18 +38,8 @@ export class CanvasControlPanel extends React.Component<Properties> {
     this.canvasRef.reDraw();
   }
 
-  private onAddEdgeClick() {
-    if(this.props.scene.nodes.length < 2 ) {
-      return;
-    }
-    const newEdge = new Edge(
-      0,
-      'new',
-      this.props.scene.getRandomNode(),
-      this.props.scene.getRandomNode()
-    );
-    this.props.scene.addEdge(newEdge);
-    this.canvasRef.reDraw();
+  private onRemoveEdge() {
+    this.canvasRef.removeEdge();
   }
 
   private onConnectEdges() {

@@ -38,13 +38,23 @@ export class Scene {
     }
   }
 
+  public removeEdge(head: Node, tail: Node) {
+    const index = this.findEdge(head, tail);
+    if(this.findEdge(head, tail) > 0) {
+      this._edges.splice(index, 1);
+    }
+  }
+
   public getRandomNode(): Node {
     const random =
       (Math.random() * (this._nodes.length - 1)) % (this._nodes.length - 1);
-    return this._nodes.slice(random, random +1)[0];
+    return this._nodes.slice(random, random + 1)[0];
   }
 
   public connectNodes(head: Node, tail: Node) {
+    if(this.findEdge(head, tail) > 0) {
+      return;
+    }
     const newEdge = new Edge(
       0,
       'new',
@@ -52,6 +62,16 @@ export class Scene {
       head
     );
     this.addEdge(newEdge);
+  }
+
+  public findEdge(head: Node, tail: Node): number {
+    for(let i = 0; i < this._edges.length; ++i) {
+      const edge = this._edges[i];
+      if(edge.head.id === head.id && edge.tail.id === tail.id) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   private _nodes: Node[];

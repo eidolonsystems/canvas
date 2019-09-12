@@ -67,14 +67,14 @@ export class Canvas extends React.Component<Properties> {
     if(this.currentNode === node) {
       ctx.beginPath();
       ctx.lineWidth = 3;
-      ctx.strokeStyle = '#ff390d';
+      ctx.strokeStyle = '#cc004e';
       ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.closePath();
     } else if(this.previousNode === node) {
       ctx.beginPath();
       ctx.lineWidth = 3;
-      ctx.strokeStyle = '#c70404';
+      ctx.strokeStyle = '#4a0101';
       ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.closePath();
@@ -184,6 +184,13 @@ export class Canvas extends React.Component<Properties> {
   public drawEdge() {
     if(this.currentNode !== null  && this.previousNode !== null) {
       this.props.scene.connectNodes(this.currentNode, this.previousNode);
+      this.reDraw();
+    }
+  }
+
+  public removeEdge() {
+    if(this.currentNode !== null  && this.previousNode !== null) {
+      this.props.scene.removeEdge(this.currentNode, this.previousNode);
       this.reDraw();
     }
   }
