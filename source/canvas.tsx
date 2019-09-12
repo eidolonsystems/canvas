@@ -45,6 +45,32 @@ export class Canvas extends React.Component<Properties> {
     window.removeEventListener('keydown', this.onKeyDown.bind(this));
   }
 
+  public reDraw() {
+    const ctx = this.canvasRef.getContext('2d');
+    ctx.clearRect(0, 0, this.canvasRef.width, this.canvasRef.height);
+    this.drawMachine();
+  }
+
+  public clearSelected() {
+    this.currentNode = null;
+    this.previousNode = null;
+    this.drawMachine();
+  }
+
+  public connectNodes() {
+    if(this.currentNode !== null  && this.previousNode !== null) {
+      this.props.scene.connectNodes(this.currentNode, this.previousNode);
+      this.reDraw();
+    }
+  }
+
+  public disconnectNode() {
+    if(this.currentNode !== null  && this.previousNode !== null) {
+      this.props.scene.removeEdge(this.currentNode, this.previousNode);
+      this.reDraw();
+    }
+  }
+  
   private drawMachine() {
     const ctx = this.canvasRef.getContext('2d');
     ctx.fillStyle = '#f2f2f2';
@@ -167,32 +193,6 @@ export class Canvas extends React.Component<Properties> {
   private computeMagnitude(point1: Position, point2: Position) {
     return Math.sqrt(Math.pow((point1.x - point2.x), 2) +
       Math.pow((point1.y - point2.y), 2));
-  }
-
-  public reDraw() {
-    const ctx = this.canvasRef.getContext('2d');
-    ctx.clearRect(0, 0, this.canvasRef.width, this.canvasRef.height);
-    this.drawMachine();
-  }
-
-  public clearSelected() {
-    this.currentNode = null;
-    this.previousNode = null;
-    this.drawMachine();
-  }
-
-  public drawEdge() {
-    if(this.currentNode !== null  && this.previousNode !== null) {
-      this.props.scene.connectNodes(this.currentNode, this.previousNode);
-      this.reDraw();
-    }
-  }
-
-  public removeEdge() {
-    if(this.currentNode !== null  && this.previousNode !== null) {
-      this.props.scene.removeEdge(this.currentNode, this.previousNode);
-      this.reDraw();
-    }
   }
 
   private getNode(x: number, y: number) {

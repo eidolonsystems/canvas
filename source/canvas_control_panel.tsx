@@ -39,11 +39,11 @@ export class CanvasControlPanel extends React.Component<Properties> {
   }
 
   private onRemoveEdge() {
-    this.canvasRef.removeEdge();
+    this.canvasRef.disconnectNode();
   }
 
   private onConnectEdges() {
-    this.canvasRef.drawEdge();
+    this.canvasRef.connectNodes();
   }
 
   private canvasRef: Canvas;
