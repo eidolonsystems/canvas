@@ -11,7 +11,7 @@ interface Properties {
 export class CanvasControlPanel extends React.Component<Properties> {
   public render(): JSX.Element {
     return (
-      <div>
+      <div style={CanvasControlPanel.STYLES.wrapper}>
         <Canvas scene={this.props.scene}
             height={500}
             width={500}
@@ -24,15 +24,23 @@ export class CanvasControlPanel extends React.Component<Properties> {
     const red = (Math.random() * 200) % 200;
     const green = (Math.random() * 50) % 50;
     const blue = (Math.random() * 200) % 200;
+    const someX = (Math.random() * 500) % 500;
+    const someY = (Math.random() * 500) % 500;
     const newNode = new Node(
       0,
       'new',
       `rgb(${red}, ${150 + green}, ${blue})`,
-      {x: 50, y: 86}
+      {x: someX, y: someY}
     );
     this.props.scene.addNode(newNode);
     this.canvasRef.reDraw();
   }
 
   private canvasRef: Canvas;
+  private static readonly STYLES = {
+    wrapper: {
+      display: 'flex' as 'flex',
+      flexDirection: 'row' as 'row'
+    }
+  };
 }
