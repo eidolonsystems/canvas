@@ -9,6 +9,10 @@ interface Properties {
   height: number;
 }
 
+interface State {
+
+}
+
 export class Canvas extends React.Component<Properties> {
   public render(): JSX.Element {
     return (
