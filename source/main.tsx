@@ -6,8 +6,8 @@ import { Edge } from './edge';
 import { Node } from './node';
 import { Scene } from './scene';
 
-const node1 = new Node(1, 's1', '#1cd2ff', {x: 10, y: 10} );
-const node2 = new Node(2, 's2', '#ff7da6', {x: 50, y: 90});
+const node1 = new Node(1, 's1', '#1cd2ff', {x: 50, y: 50} );
+const node2 = new Node(2, 's2', '#ff7da6', {x: 150, y: 150});
 const edge = new Edge(1, 'e1', node1, node2);
 const scene = new Scene([], []);
 scene.addNode(node1);

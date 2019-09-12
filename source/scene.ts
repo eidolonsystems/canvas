@@ -19,6 +19,7 @@ export class Scene {
 
   public addNode(node: Node): void {
     node.id = this._maxNodeID;
+    node.name = `s${node.id}`;
     this._nodes.push(node);
     ++this._maxNodeID;
   }

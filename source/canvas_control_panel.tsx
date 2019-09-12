@@ -21,9 +21,9 @@ export class CanvasControlPanel extends React.Component<Properties> {
   }
 
   private onClick() {
-    const red = (Math.random() * 200) % 200;
+    const red = (Math.random() * 250) % 250;
     const green = (Math.random() * 50) % 50;
-    const blue = (Math.random() * 200) % 200;
+    const blue = (Math.random() * 250) % 250;
     const someX = (Math.random() * 500) % 500;
     const someY = (Math.random() * 500) % 500;
     const newNode = new Node(

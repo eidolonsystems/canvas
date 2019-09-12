@@ -178,6 +178,7 @@ export class Canvas extends React.Component<Properties> {
     this.isMouseDown = true;
     if(this.machineState === 'rest') {
       this.currentNode = this.getNode(event.offsetX, event.offsetY);
+      this.reDraw();
       this.restState();
     }
   }
