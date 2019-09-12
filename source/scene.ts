@@ -39,11 +39,20 @@ export class Scene {
   }
 
   public getRandomNode(): Node {
-    const random = 
+    const random =
       (Math.random() * (this._nodes.length - 1)) % (this._nodes.length - 1);
     return this._nodes.slice(random, random +1)[0];
   }
 
+  public connectNodes(head: Node, tail: Node) {
+    const newEdge = new Edge(
+      0,
+      'new',
+      tail,
+      head
+    );
+    this.addEdge(newEdge);
+  }
 
   private _nodes: Node[];
   private _edges: Edge[];

@@ -181,6 +181,13 @@ export class Canvas extends React.Component<Properties> {
     this.drawMachine();
   }
 
+  public drawEdge() {
+    if(this.currentNode !== null  && this.previousNode !== null) {
+      this.props.scene.connectNodes(this.currentNode, this.previousNode);
+      this.reDraw();
+    }
+  }
+
   private getNode(x: number, y: number) {
     for(const node of this.props.scene.nodes.reverse()) {
       if(Math.pow(x - node.position.x, 2) + Math.pow(y - node.position.y, 2) <=
@@ -188,6 +195,7 @@ export class Canvas extends React.Component<Properties> {
         return node;
       }
     }
+    return null;
   }
 
   private onMouseDown(event: PointerEvent) {
