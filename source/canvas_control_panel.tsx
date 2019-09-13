@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Canvas } from './canvas';
+import { Position, Node } from './node';
 import { NodeEditor } from './node_editor';
 
 interface Properties {
@@ -8,13 +9,15 @@ interface Properties {
 
 interface State {
   currentNode: Node;
+  previousNode: Node;
 }
 
 export class CanvasControlPanel extends React.Component<Properties, State> {
   constructor(props: Properties) {
     super(props);
     this.state = {
-      currentNode: null
+      currentNode: null,
+      previousNode: null
     };
   }
 
@@ -25,10 +28,14 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
           <Canvas
             height={500}
             width={500}
+            previousNode={this.state.previousNode}
+            currentNode={this.state.currentNode}
             onNodeSelected={this.newCurrentNodeSelected.bind(this)}
+            onClearNodes={this.clearSelectedNodes.bind(this)}
             ref={(thing) => this.canvasRef = thing}/>
           <NodeEditor
             node={this.state.currentNode}
+            submitUpdatedNode={this.nodeValuesUpdated.bind(this)}
             ref={(thing) => this.nodeEditorRef = thing}/>
         </div>
         <div style={CanvasControlPanel.STYLES.controlPanel}>
@@ -60,11 +67,27 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
 
   private newCurrentNodeSelected(node: Node) {
     this.setState({
+      previousNode: this.state.currentNode,
       currentNode: node
     });
   }
 
+  private clearSelectedNodes() {
+    this.setState({
+      previousNode: null,
+      currentNode: null
+    });
+  }
+
   private nodeValuesUpdated(name: string, color: string) {
+    console.log('SUBMITTEDDDDDD');
+    if(name !== '') {
+      this.state.currentNode.name = name;
+    }
+    if(color !== '') {
+      this.state.currentNode.color = color;
+    }
+    this.canvasRef.reDraw();
   }
 
   private onAddNodeClick() {

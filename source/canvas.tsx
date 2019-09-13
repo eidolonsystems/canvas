@@ -7,8 +7,8 @@ interface Properties {
   width: number;
   height: number;
   scene?: Scene;
-  currentNode?: Node;
-  previousNode?: Node;
+  currentNode?: Node | null;
+  previousNode?: Node | null;
   onNodeSelected?: (node: Node) => void;
   onClearNodes?: () => void;
 }
@@ -95,7 +95,7 @@ export class Canvas extends React.Component<Properties, State> {
   public disconnectNode() {
     if(this.currentNode !== null  && this.previousNode !== null) {
       this.state.scene.removeEdge(this.currentNode, this.previousNode);
-      
+
       this.reDraw();
     }
   }
