@@ -15,4 +15,4 @@ scene.addNode(node2);
 scene.addEdge(edge);
 
 ReactDOM.render(
-  <CanvasControlPanel scene={scene}/>, document.getElementById('main'));
+  <CanvasControlPanel/>, document.getElementById('main'));

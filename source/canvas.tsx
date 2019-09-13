@@ -4,16 +4,22 @@ import { Position, Node } from './node';
 import { Scene } from './scene';
 
 interface Properties {
-  scene: Scene;
   width: number;
   height: number;
 }
 
 interface State {
-
+  scene: Scene;
 }
 
-export class Canvas extends React.Component<Properties> {
+export class Canvas extends React.Component<Properties, State> {
+  constructor(props: Properties) {
+    super(props);
+    this.state = {
+      scene: new Scene([], [])
+    };
+  }
+
   public render(): JSX.Element {
     return (
       <canvas ref={(thing) => this.canvasRef = thing}
@@ -57,16 +63,32 @@ export class Canvas extends React.Component<Properties> {
     this.drawMachine();
   }
 
+  public addNode() {
+    const red = (Math.random() * 250) % 250;
+    const green = (Math.random() * 50) % 50;
+    const blue = (Math.random() * 250) % 250;
+    const someX = (Math.random() * 500) % 500;
+    const someY = (Math.random() * 500) % 500;
+    const newNode = new Node(
+      0,
+      'new',
+      `rgb(${red}, ${150 + green}, ${blue})`,
+      {x: someX, y: someY}
+    );
+    this.state.scene.addNode(newNode);
+    this.reDraw();
+  }
+
   public connectNodes() {
     if(this.currentNode !== null  && this.previousNode !== null) {
-      this.props.scene.connectNodes(this.currentNode, this.previousNode);
+      this.state.scene.connectNodes(this.currentNode, this.previousNode);
       this.reDraw();
     }
   }
 
   public disconnectNode() {
     if(this.currentNode !== null  && this.previousNode !== null) {
-      this.props.scene.removeEdge(this.currentNode, this.previousNode);
+      this.state.scene.removeEdge(this.currentNode, this.previousNode);
       this.reDraw();
     }
   }
@@ -75,10 +97,10 @@ export class Canvas extends React.Component<Properties> {
     const ctx = this.canvasRef.getContext('2d');
     ctx.fillStyle = '#f2f2f2';
     ctx.fillRect(0, 0, this.canvasRef.width, this.canvasRef.height);
-    for(const edge of this.props.scene.edges) {
+    for(const edge of this.state.scene.edges) {
       this.drawArrow(edge);
     }
-    for(const node of this.props.scene.nodes) {
+    for(const node of this.state.scene.nodes) {
       this.drawCircle(node);
     }
   }
@@ -123,7 +145,7 @@ export class Canvas extends React.Component<Properties> {
     const magnitude = this.computeMagnitude(head, tail);
     const unitVector = {
       x: (head.x - tail.x) / magnitude,
-      y: (head.y - tail.y)/magnitude};
+      y: (head.y - tail.y) / magnitude};
     let point1 = {x: 0, y: 0};
     const intersection = this.computeMagnitude(head, tail) - Canvas.radius;
     if(true) {
@@ -144,7 +166,7 @@ export class Canvas extends React.Component<Properties> {
     const magnitude = this.computeMagnitude(head, tail);
     const unitVector = {
       x: (head.x - tail.x) / magnitude,
-      y: (head.y - tail.y)/magnitude};
+      y: (head.y - tail.y) / magnitude};
     let point1 = {x: 0, y: 0};
     const intersection = this.computeMagnitude(head, tail) - Canvas.radius;
     if(intersection <= 0) {
@@ -196,7 +218,7 @@ export class Canvas extends React.Component<Properties> {
   }
 
   private getNode(x: number, y: number) {
-    for(const node of this.props.scene.nodes.reverse()) {
+    for(const node of this.state.scene.nodes.reverse()) {
       if(Math.pow(x - node.position.x, 2) + Math.pow(y - node.position.y, 2) <=
         Math.pow(Canvas.radius, 2)) {
         return node;
@@ -240,7 +262,7 @@ export class Canvas extends React.Component<Properties> {
       console.log('deleeeeeteeee');
       if(this.currentNode !== null) {
         console.log(this.currentNode);
-        this.props.scene.deleteNode(this.currentNode);
+        this.state.scene.deleteNode(this.currentNode);
         this.reDraw();
       }
     }

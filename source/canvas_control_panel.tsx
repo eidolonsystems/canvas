@@ -4,15 +4,11 @@ import { Position, Node } from './node';
 import { Scene } from './scene';
 import { Canvas } from './canvas';
 
-interface Properties {
-  scene: Scene;
-}
-
-export class CanvasControlPanel extends React.Component<Properties> {
+export class CanvasControlPanel extends React.Component {
   public render(): JSX.Element {
     return (
       <div style={CanvasControlPanel.STYLES.wrapper}>
-        <Canvas scene={this.props.scene}
+        <Canvas
             height={500}
             width={500}
             ref={(thing) => this.canvasRef = thing}/>
@@ -23,19 +19,7 @@ export class CanvasControlPanel extends React.Component<Properties> {
   }
 
   private onAddNodeClick() {
-    const red = (Math.random() * 250) % 250;
-    const green = (Math.random() * 50) % 50;
-    const blue = (Math.random() * 250) % 250;
-    const someX = (Math.random() * 500) % 500;
-    const someY = (Math.random() * 500) % 500;
-    const newNode = new Node(
-      0,
-      'new',
-      `rgb(${red}, ${150 + green}, ${blue})`,
-      {x: someX, y: someY}
-    );
-    this.props.scene.addNode(newNode);
-    this.canvasRef.reDraw();
+    this.canvasRef.addNode();
   }
 
   private onRemoveEdge() {
