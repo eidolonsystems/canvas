@@ -6,6 +6,7 @@ import { Scene } from './scene';
 interface Properties {
   width: number;
   height: number;
+  onNodeSelected?: (node: Node) => void;
 }
 
 interface State {
@@ -60,6 +61,7 @@ export class Canvas extends React.Component<Properties, State> {
   public clearSelected() {
     this.currentNode = null;
     this.previousNode = null;
+    this.props.onNodeSelected(null);
     this.drawMachine();
   }
 
@@ -236,6 +238,7 @@ export class Canvas extends React.Component<Properties, State> {
       } else {
         this.previousNode = this.currentNode;
         this.currentNode = newNode;
+        this.props.onNodeSelected(newNode);
       }
       this.reDraw();
       this.restState();

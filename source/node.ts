@@ -25,20 +25,20 @@ export class Node {
     return this._name;
   }
 
-  public get color(): string {
-    return this._color;
-  }
-
-  public get position(): Position {
-    return this._position;
-  }
-
   public set name(newName: string) {
     this._name = newName;
   }
 
+  public get color(): string {
+    return this._color;
+  }
+
   public set color(newColor: string) {
     this._color = newColor;
+  }
+
+  public get position(): Position {
+    return this._position;
   }
 
   public set position(newPosition: Position) {
