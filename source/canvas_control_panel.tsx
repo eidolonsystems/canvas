@@ -80,7 +80,6 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
   }
 
   private nodeValuesUpdated(name: string, color: string) {
-    console.log('SUBMITTEDDDDDD');
     if(name !== '') {
       this.state.currentNode.name = name;
     }
