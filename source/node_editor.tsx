@@ -29,6 +29,12 @@ export class NodeEditor extends React.Component<Properties> {
     }
   }
 
+  componentDidUpdate() {
+    this.nameInputRef.value = this.props.node.name;
+    this.colorInputRef.value = this.props.node.color;
+  
+  }
+
   private onSubmit() {
     this.props.submitUpdatedNode(
       this.nameInputRef.value.toString(),
