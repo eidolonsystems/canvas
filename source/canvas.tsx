@@ -6,7 +6,11 @@ import { Scene } from './scene';
 interface Properties {
   width: number;
   height: number;
+  scene?: Scene;
+  currentNode?: Node;
+  previousNode?: Node;
   onNodeSelected?: (node: Node) => void;
+  onClearNodes?: () => void;
 }
 
 interface State {
@@ -91,6 +95,7 @@ export class Canvas extends React.Component<Properties, State> {
   public disconnectNode() {
     if(this.currentNode !== null  && this.previousNode !== null) {
       this.state.scene.removeEdge(this.currentNode, this.previousNode);
+      
       this.reDraw();
     }
   }

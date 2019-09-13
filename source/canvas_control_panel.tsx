@@ -25,7 +25,7 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
           <Canvas
             height={500}
             width={500}
-            onNodeSelected={this.currentNodeUpdated.bind(this)}
+            onNodeSelected={this.newCurrentNodeSelected.bind(this)}
             ref={(thing) => this.canvasRef = thing}/>
           <NodeEditor
             node={this.state.currentNode}
@@ -47,6 +47,7 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
         </div>
         <div style={CanvasControlPanel.STYLES.directions}>
           Click on a node to select it.
+          <br/>Enter color as a hexcode with the hashtag or a html legal RGB.
           <br/>Hold and drag the node to reposition it.
           <br/>To draw a arrow select two nodes.
           <br/>The second node you click on will be the head.
@@ -57,10 +58,13 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
       </div>);
   }
 
-  private currentNodeUpdated(node: Node) {
+  private newCurrentNodeSelected(node: Node) {
     this.setState({
       currentNode: node
     });
+  }
+
+  private nodeValuesUpdated(name: string, color: string) {
   }
 
   private onAddNodeClick() {
@@ -75,13 +79,14 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
     this.canvasRef.connectNodes();
   }
 
+
   private canvasRef: Canvas;
   private nodeEditorRef: NodeEditor;
   private static readonly STYLES = {
     wrapper: {
       display: 'flex' as 'flex',
       flexDirection: 'row' as 'row',
-      font: '400 11px system-ui'
+      font: '420 12px system-ui'
     },
     controlPanel: {
       display: 'flex' as 'flex',
@@ -93,7 +98,9 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
     button: {
       margin: '10px',
       paddingBottom: '10px',
-      paddingTop: '10px'
+      paddingTop: '10px',
+      borderRadius: '8px',
+      width: '65px'
     }
   };
 }

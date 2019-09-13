@@ -2,6 +2,7 @@ import * as React from 'react';
 
 interface Properties {
   node: Node;
+  submitUpdatedNode?: (name: string, color: string) => void;
 }
 
 export class NodeEditor extends React.Component<Properties> {
@@ -13,17 +14,28 @@ export class NodeEditor extends React.Component<Properties> {
     <div style={NodeEditor.STYLES.wrapper}>
       <div style={NodeEditor.STYLES.formPair}>
         <label style={NodeEditor.STYLES.label}>name:</label>
-        <input type='text'></input>
+        <input type='text' ref={(thing) => this.nameInputRef = thing}></input>
       </div>
       <div style={NodeEditor.STYLES.formPair}>
         <label style={NodeEditor.STYLES.label}>color:</label>
-        <input type='text'></input>
+        <input type='text' ref={(thing) => this.colorInputRef = thing}></input>
       </div>
-      <button style={NodeEditor.STYLES.button} >Save</button>
+      <button style={NodeEditor.STYLES.button}
+          onClick={this.onSubmit.bind(this)}>
+        Save Changes
+      </button>
     </div>);
     }
   }
 
+  private onSubmit() {
+    this.props.submitUpdatedNode(
+      this.nameInputRef.value.toString(),
+      this.colorInputRef.value.toString());
+  }
+
+  private nameInputRef: HTMLInputElement;
+  private colorInputRef: HTMLInputElement;
   private static readonly STYLES = {
     hidden: {
       display: 'none' as 'none'
