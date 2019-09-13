@@ -67,14 +67,14 @@ export class Canvas extends React.Component<Properties, State> {
 
   public addNode() {
     const red = (Math.random() * 250) % 250;
-    const green = (Math.random() * 50) % 50;
-    const blue = (Math.random() * 250) % 250;
+    const green = (Math.random() * 100) % 100;
+    const blue = (Math.random() * 230) % 230;
     const someX = (Math.random() * 500) % 500;
     const someY = (Math.random() * 500) % 500;
     const newNode = new Node(
       0,
       'new',
-      `rgb(${red}, ${150 + green}, ${blue})`,
+      `rgb(${red}, ${130 + green}, ${20 + blue})`,
       {x: someX, y: someY}
     );
     this.state.scene.addNode(newNode);
