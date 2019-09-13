@@ -92,7 +92,7 @@ export class Canvas extends React.Component<Properties, State> {
       this.reDraw();
     }
   }
-  
+
   private drawMachine() {
     const ctx = this.canvasRef.getContext('2d');
     ctx.fillStyle = '#f2f2f2';
