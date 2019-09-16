@@ -95,8 +95,6 @@ export class Canvas extends React.Component<Properties> {
   private drawArrow(edge: Edge) {
     const ctx = this.canvasRef.getContext('2d');
     ctx.beginPath();
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'black';
     ctx.moveTo(edge.tail.position.x, edge.tail.position.y);
     const tail = edge.tail.position;
     const head = edge.head.position;
@@ -104,20 +102,26 @@ export class Canvas extends React.Component<Properties> {
     const unitVector = {
       x: (head.x - tail.x) / magnitude,
       y: (head.y - tail.y) / magnitude};
-    let point1 = {x: 0, y: 0};
+    let endPoint = {x: 0, y: 0};
     const intersection = this.computeMagnitude(head, tail) - Canvas.radius;
-    point1 = {
+    let labelPoint = {
       x: tail.x + (intersection / 3 * unitVector.x),
       y: tail.y + (intersection / 3 * unitVector.y)
     };
-    ctx.font = '12px Arial';
-    ctx.fillStyle = 'black';
-    ctx.fillText(edge.name, point1.x, point1.y);
-    point1 = {
+    labelPoint = {
+      x: labelPoint.x - (20 * unitVector.y),
+      y: labelPoint.y + (20 * unitVector.x)
+    };
+    ctx.font = '500 14px Arial';
+    ctx.fillStyle = 'navy';
+    ctx.fillText(edge.name, labelPoint.x, labelPoint.y);
+    endPoint = {
       x: tail.x + (intersection * unitVector.x),
       y: tail.y + (intersection * unitVector.y)
     };
-    ctx.lineTo(point1.x, point1.y);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'black';
+    ctx.lineTo(endPoint.x, endPoint.y);
     ctx.stroke();
     ctx.closePath();
     this.drawTriangle(edge);

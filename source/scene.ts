@@ -57,7 +57,7 @@ export class Scene {
     }
     const newEdge = new Edge(
       0,
-      `e${this._maxEdgeID}`,
+      `E${this._maxEdgeID}`,
       tail,
       head
     );

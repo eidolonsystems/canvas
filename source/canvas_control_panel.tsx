@@ -56,17 +56,6 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             Remove Edge
           </button>
         </div>
-        <div style={CanvasControlPanel.STYLES.directions}>
-          <br/>Click on a node to select it.<br/>
-          <br/>Enter color as a hexcode with the hashtag or a RGB value.
-          <br/>
-          <br/>Hold and drag the node to reposition it.<br/>
-          <br/>To draw a arrow select two nodes.<br/>
-          <br/>The second node you click on will be the head.<br/>
-          <br/>Click somewhere there is no node to deselect.<br/>
-          <br/>To delete a node select a node and then.
-            press backspace or delete.<br/>
-        </div>
       </div>);
   }
 
