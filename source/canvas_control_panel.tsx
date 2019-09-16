@@ -39,8 +39,8 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             submitUpdatedNode={this.nodeValuesUpdated.bind(this)}/>
           <EdgeEditor
             edge={this.state.scene.findEdge(
-                this.state.currentNode,
-                this.state.previousNode
+              this.state.currentNode,
+              this.state.previousNode
             )}
             submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>
         </div>

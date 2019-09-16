@@ -24,12 +24,6 @@ export class Scene {
     ++this._maxNodeID;
   }
 
-  public addEdge(edge: Edge): void {
-    edge.id = this._maxEdgeID;
-    this._edges.push(edge);
-    ++this._maxEdgeID;
-  }
-
   public deleteNode(nodeToRemove: Node): void {
     for(let i = 0; i < this._nodes.length ; ++i) {
       if(this._nodes[i].id === nodeToRemove.id) {
@@ -65,16 +59,19 @@ export class Scene {
   }
 
   public connectNodes(head: Node, tail: Node) {
-    if(this.findEdgeIndex(head, tail) > 0) {
+    console.log('head', head.name, 'tail', tail.name);
+    console.log(this.findEdgeIndex(head, tail));
+    if(this.findEdgeIndex(head, tail) >= 0) {
       return;
     }
     const newEdge = new Edge(
-      0,
+      this._maxEdgeID,
       `E${this._maxEdgeID}`,
       tail,
       head
     );
-    this.addEdge(newEdge);
+    this._edges.push(newEdge);
+    ++this._maxEdgeID;
   }
 
   private findEdgeIndex(head: Node, tail: Node): number {
