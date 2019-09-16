@@ -1,21 +1,20 @@
 import * as React from 'react';
 import { Canvas } from './canvas';
-import { Position, Node } from './node';
+import { Node } from './node';
 import { NodeEditor } from './node_editor';
-
-interface Properties {
-
-}
+import { Scene } from './scene';
 
 interface State {
+  scene: Scene;
   currentNode: Node;
   previousNode: Node;
 }
 
-export class CanvasControlPanel extends React.Component<Properties, State> {
-  constructor(props: Properties) {
+export class CanvasControlPanel extends React.Component<{}, State> {
+  constructor(props: {}) {
     super(props);
     this.state = {
+      scene: new Scene([], []),
       currentNode: null,
       previousNode: null
     };
@@ -26,6 +25,7 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
       <div style={CanvasControlPanel.STYLES.wrapper}>
         <div style={CanvasControlPanel.STYLES.controlPanel}>
           <Canvas
+            scene={this.state.scene}
             height={500}
             width={500}
             previousNode={this.state.previousNode}
@@ -39,28 +39,33 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
             ref={(thing) => this.nodeEditorRef = thing}/>
         </div>
         <div style={CanvasControlPanel.STYLES.controlPanel}>
-          <button onClick={this.onAddNodeClick.bind(this)}
+          <button onClick={this.addNode.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
             Add Node
           </button>
-          <button onClick={this.onConnectEdges.bind(this)}
+          <button onClick={this.removeNode.bind(this)}
+              style={CanvasControlPanel.STYLES.button}>
+            Remove Node
+          </button>
+          <button onClick={this.connectNodes.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
             Add Edge
           </button>
-          <button onClick={this.onRemoveEdge.bind(this)}
+          <button onClick={this.disconnectNode.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
             Remove Edge
           </button>
         </div>
         <div style={CanvasControlPanel.STYLES.directions}>
-          Click on a node to select it.
-          <br/>Enter color as a hexcode with the hashtag or a html legal RGB.
-          <br/>Hold and drag the node to reposition it.
-          <br/>To draw a arrow select two nodes.
-          <br/>The second node you click on will be the head.
-          <br/>Click somewhere there is no node to deselect.
+          <br/>Click on a node to select it.<br/>
+          <br/>Enter color as a hexcode with the hashtag or a RGB value.
+          <br/>
+          <br/>Hold and drag the node to reposition it.<br/>
+          <br/>To draw a arrow select two nodes.<br/>
+          <br/>The second node you click on will be the head.<br/>
+          <br/>Click somewhere there is no node to deselect.<br/>
           <br/>To delete a node select a node and then.
-            press backspace or delete.
+            press backspace or delete.<br/>
         </div>
       </div>);
   }
@@ -86,21 +91,49 @@ export class CanvasControlPanel extends React.Component<Properties, State> {
     if(color !== '') {
       this.state.currentNode.color = color;
     }
-    this.canvasRef.reDraw();
+    this.setState({currentNode: this.state.currentNode});
   }
 
-  private onAddNodeClick() {
-    this.canvasRef.addNode();
+  public addNode() {
+    const red = Math.floor(Math.random() * Math.floor(250));
+    const green = Math.floor(Math.random() * Math.floor(100));
+    const blue = Math.floor(Math.random() * Math.floor(230));
+    const someX = Math.floor(Math.random() * Math.floor(500));
+    const someY = Math.floor(Math.random() * Math.floor(500));
+    const newNode = new Node(
+      0,
+      'new',
+      `rgb(${red}, ${130 + green}, ${20 + blue})`,
+      {x: someX, y: someY}
+    );
+    this.state.scene.addNode(newNode);
+    this.setState({scene: this.state.scene});
   }
 
-  private onRemoveEdge() {
-    this.canvasRef.disconnectNode();
+  public removeNode() {
+    this.state.scene.deleteNode(this.state.currentNode);
+    this.setState({
+      currentNode: null,
+      previousNode: null,
+      scene: this.state.scene
+      });
   }
 
-  private onConnectEdges() {
-    this.canvasRef.connectNodes();
+  public connectNodes() {
+    if(this.state.currentNode !== null  && this.state.previousNode !== null) {
+      this.state.scene.connectNodes(
+        this.state.currentNode, this.state.previousNode);
+      this.setState({scene: this.state.scene});
+    }
   }
 
+  public disconnectNode() {
+    if(this.state.currentNode !== null  && this.state.previousNode !== null) {
+      this.state.scene.removeEdge(
+        this.state.currentNode, this.state.previousNode);
+      this.setState({scene: this.state.scene});
+    }
+  }
 
   private canvasRef: Canvas;
   private nodeEditorRef: NodeEditor;

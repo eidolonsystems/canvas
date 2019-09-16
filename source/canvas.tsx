@@ -6,23 +6,16 @@ import { Scene } from './scene';
 interface Properties {
   width: number;
   height: number;
-  scene?: Scene;
+  scene: Scene;
   currentNode?: Node | null;
   previousNode?: Node | null;
   onNodeSelected?: (node: Node) => void;
   onClearNodes?: () => void;
 }
 
-interface State {
-  scene: Scene;
-}
-
-export class Canvas extends React.Component<Properties, State> {
+export class Canvas extends React.Component<Properties> {
   constructor(props: Properties) {
     super(props);
-    this.state = {
-      scene: new Scene([], [])
-    };
   }
 
   public render(): JSX.Element {
@@ -38,13 +31,14 @@ export class Canvas extends React.Component<Properties, State> {
     this.drawMachine();
     this.machineState = 'rest';
     this.isMouseDown = false;
-    this.currentNode = null;
-    this.previousNode = null;
-    this.currentArrow = null;
     this.canvasRef.addEventListener('pointerdown', this.onMouseDown.bind(this));
     this.canvasRef.addEventListener('pointerup', this.onMouseUp.bind(this));
     this.canvasRef.addEventListener('pointermove', this.onMouseMove.bind(this));
-    window.addEventListener('keydown', this.onKeyDown.bind(this));
+    this.canvasRef.addEventListener('keydown', this.onKeyDown.bind(this));
+  }
+
+  public componentDidUpdate() {
+    this.drawMachine();
   }
 
   public componentWillUnmount() {
@@ -53,61 +47,18 @@ export class Canvas extends React.Component<Properties, State> {
     this.canvasRef.removeEventListener('pointerup', this.onMouseUp.bind(this));
     this.canvasRef.removeEventListener('pointermove',
       this.onMouseMove.bind(this));
-    window.removeEventListener('keydown', this.onKeyDown.bind(this));
-  }
-
-  public reDraw() {
-    const ctx = this.canvasRef.getContext('2d');
-    ctx.clearRect(0, 0, this.canvasRef.width, this.canvasRef.height);
-    this.drawMachine();
-  }
-
-  public clearSelected() {
-    this.currentNode = null;
-    this.previousNode = null;
-    this.props.onNodeSelected(null);
-    this.drawMachine();
-  }
-
-  public addNode() {
-    const red = Math.floor(Math.random() * Math.floor(250));
-    const green = Math.floor(Math.random() * Math.floor(100));
-    const blue = Math.floor(Math.random() * Math.floor(230));
-    const someX = Math.floor(Math.random() * Math.floor(500));
-    const someY = Math.floor(Math.random() * Math.floor(500));
-    const newNode = new Node(
-      0,
-      'new',
-      `rgb(${red}, ${130 + green}, ${20 + blue})`,
-      {x: someX, y: someY}
-    );
-    this.state.scene.addNode(newNode);
-    this.reDraw();
-  }
-
-  public connectNodes() {
-    if(this.currentNode !== null  && this.previousNode !== null) {
-      this.state.scene.connectNodes(this.currentNode, this.previousNode);
-      this.reDraw();
-    }
-  }
-
-  public disconnectNode() {
-    if(this.currentNode !== null  && this.previousNode !== null) {
-      this.state.scene.removeEdge(this.currentNode, this.previousNode);
-
-      this.reDraw();
-    }
+    this.canvasRef.removeEventListener('keydown', this.onKeyDown.bind(this));
   }
 
   private drawMachine() {
     const ctx = this.canvasRef.getContext('2d');
+    ctx.clearRect(0, 0, this.canvasRef.width, this.canvasRef.height);
     ctx.fillStyle = '#f2f2f2';
     ctx.fillRect(0, 0, this.canvasRef.width, this.canvasRef.height);
-    for(const edge of this.state.scene.edges) {
+    for(const edge of this.props.scene.edges) {
       this.drawArrow(edge);
     }
-    for(const node of this.state.scene.nodes) {
+    for(const node of this.props.scene.nodes) {
       this.drawCircle(node);
     }
   }
@@ -119,14 +70,14 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.closePath();
-    if(this.currentNode === node) {
+    if(this.props.currentNode === node) {
       ctx.beginPath();
       ctx.lineWidth = 3;
       ctx.strokeStyle = '#cc004e';
       ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.closePath();
-    } else if(this.previousNode === node) {
+    } else if(this.props.previousNode === node) {
       ctx.beginPath();
       ctx.lineWidth = 3;
       ctx.strokeStyle = '#4a0101';
@@ -155,12 +106,17 @@ export class Canvas extends React.Component<Properties, State> {
       y: (head.y - tail.y) / magnitude};
     let point1 = {x: 0, y: 0};
     const intersection = this.computeMagnitude(head, tail) - Canvas.radius;
-    if(true) {
-      point1 = {
-        x: tail.x + (intersection * unitVector.x),
-        y: tail.y + (intersection * unitVector.y)
-      };
-    }
+    point1 = {
+      x: tail.x + (intersection / 3 * unitVector.x),
+      y: tail.y + (intersection / 3 * unitVector.y)
+    };
+    ctx.font = '12px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(edge.name, point1.x, point1.y);
+    point1 = {
+      x: tail.x + (intersection * unitVector.x),
+      y: tail.y + (intersection * unitVector.y)
+    };
     ctx.lineTo(point1.x, point1.y);
     ctx.stroke();
     ctx.closePath();
@@ -225,7 +181,7 @@ export class Canvas extends React.Component<Properties, State> {
   }
 
   private getNode(x: number, y: number) {
-    for(const node of this.state.scene.nodes.reverse()) {
+    for(const node of this.props.scene.nodes.reverse()) {
       if(Math.pow(x - node.position.x, 2) + Math.pow(y - node.position.y, 2) <=
         Math.pow(Canvas.radius, 2)) {
         return node;
@@ -239,13 +195,10 @@ export class Canvas extends React.Component<Properties, State> {
     if(this.machineState === 'rest') {
       const newNode = this.getNode(event.offsetX, event.offsetY);
       if(newNode === null) {
-        this.clearSelected();
+        this.props.onClearNodes();
       } else {
-        this.previousNode = this.currentNode;
-        this.currentNode = newNode;
         this.props.onNodeSelected(newNode);
       }
-      this.reDraw();
       this.restState();
     }
   }
@@ -259,42 +212,36 @@ export class Canvas extends React.Component<Properties, State> {
 
   private onMouseMove(event: PointerEvent) {
     if(this.machineState === 'repositioning') {
-      this.currentNode.position = {x: event.offsetX, y: event.offsetY};
+      this.props.currentNode.position = {x: event.offsetX, y: event.offsetY};
       this.repositioningState();
     }
   }
 
   private onKeyDown(event: KeyboardEvent) {
-    console.log('key down!');
     if(event.key === 'Delete' || event.key === 'Backspace') {
-      console.log('deleeeeeteeee');
-      if(this.currentNode !== null) {
-        console.log(this.currentNode);
-        this.state.scene.deleteNode(this.currentNode);
-        this.reDraw();
+      if(this.props.currentNode !== null) {
+        this.props.scene.deleteNode(this.props.currentNode);
+        this.drawMachine();
       }
     }
   }
 
   private restState() {
     this.machineState = 'rest';
-    if(this.currentNode && this.isMouseDown) {
+    if(this.props.currentNode && this.isMouseDown) {
       this.repositioningState();
     }
   }
 
   private repositioningState() {
     this.machineState = 'repositioning';
-    this.reDraw();
+    this.drawMachine();
   }
 
   private machineState: string;
   private canvasRef: HTMLCanvasElement;
-  private currentNode: Node;
-  private previousNode: Node;
-  private currentArrow: Node;
   private isMouseDown: boolean;
-  private static radius = 30;
+  private static radius = 28;
   private static arrowLenght = 10;
   private static arrowWidth = 5;
 }
