@@ -142,7 +142,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     wrapper: {
       display: 'flex' as 'flex',
       flexDirection: 'row' as 'row',
-      font: '420 12px system-ui'
+      font: '420 12px Arial'
     },
     controlPanel: {
       display: 'flex' as 'flex',
