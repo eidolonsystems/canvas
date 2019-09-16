@@ -29,10 +29,11 @@ export class NodeEditor extends React.Component<Properties> {
     }
   }
 
-  componentDidUpdate() {
+  public componentDidUpdate() {
+    if(this.props.node !== null) {
     this.nameInputRef.value = this.props.node.name;
     this.colorInputRef.value = this.props.node.color;
-  
+    }
   }
 
   private onSubmit() {
