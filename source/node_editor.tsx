@@ -13,11 +13,12 @@ export class NodeEditor extends React.Component<Properties> {
     } else {
       return (
     <div style={NodeEditor.STYLES.wrapper}>
-      <div style={NodeEditor.STYLES.formPair}>
+      <div style={NodeEditor.STYLES.center}>{'Node Editor'}</div>
+      <div style={NodeEditor.STYLES.center}>
         <label style={NodeEditor.STYLES.label}>name:</label>
         <input type='text' ref={(thing) => this.nameInputRef = thing}></input>
       </div>
-      <div style={NodeEditor.STYLES.formPair}>
+      <div style={NodeEditor.STYLES.center}>
         <label style={NodeEditor.STYLES.label}>color:</label>
         <input type='text' ref={(thing) => this.colorInputRef = thing}></input>
       </div>
@@ -54,7 +55,7 @@ export class NodeEditor extends React.Component<Properties> {
       flexDirection: 'column' as 'column',
       alignItems: 'center' as 'center'
     },
-    formPair: {
+    center: {
       paddingBottom: '15px',
       display: 'flex' as 'flex',
       flexDirection: 'row' as 'row',

@@ -39,8 +39,8 @@ export class Scene {
   }
 
   public removeEdge(head: Node, tail: Node) {
-    const index = this.findEdge(head, tail);
-    if(this.findEdge(head, tail) > 0) {
+    const index = this.findEdgeIndex(head, tail);
+    if(this.findEdgeIndex(head, tail) > 0) {
       this._edges.splice(index, 1);
     }
   }
@@ -51,8 +51,18 @@ export class Scene {
     return this._nodes.slice(random, random + 1)[0];
   }
 
+  public findEdge(head: Node, tail: Node): Edge {
+    for(let i = 0; i < this._edges.length; ++i) {
+      const edge = this._edges[i];
+      if(edge.head.id === head.id && edge.tail.id === tail.id) {
+        return edge;
+      }
+    }
+    return null;
+  }
+
   public connectNodes(head: Node, tail: Node) {
-    if(this.findEdge(head, tail) > 0) {
+    if(this.findEdgeIndex(head, tail) > 0) {
       return;
     }
     const newEdge = new Edge(
@@ -64,7 +74,7 @@ export class Scene {
     this.addEdge(newEdge);
   }
 
-  public findEdge(head: Node, tail: Node): number {
+  private findEdgeIndex(head: Node, tail: Node): number {
     for(let i = 0; i < this._edges.length; ++i) {
       const edge = this._edges[i];
       if(edge.head.id === head.id && edge.tail.id === tail.id) {

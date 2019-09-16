@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Canvas } from './canvas';
+import { EdgeEditor } from './edge_editor';
 import { Node } from './node';
 import { NodeEditor } from './node_editor';
 import { Scene } from './scene';
@@ -35,8 +36,13 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             ref={(thing) => this.canvasRef = thing}/>
           <NodeEditor
             node={this.state.currentNode}
-            submitUpdatedNode={this.nodeValuesUpdated.bind(this)}
-            ref={(thing) => this.nodeEditorRef = thing}/>
+            submitUpdatedNode={this.nodeValuesUpdated.bind(this)}/>
+          <EdgeEditor
+            edge={this.state.scene.findEdge(
+                this.state.currentNode,
+                this.state.previousNode
+            )}
+            submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>
         </div>
         <div style={CanvasControlPanel.STYLES.controlPanel}>
           <button onClick={this.addNode.bind(this)}
@@ -83,6 +89,13 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     this.setState({currentNode: this.state.currentNode});
   }
 
+  private edgesValueUpdated(name: string, color: string) {
+    if(name !== '') {
+      this.state.currentNode.name = name;
+    }
+    this.setState({scene: this.state.scene});
+  }
+
   public addNode() {
     const red = Math.floor(Math.random() * Math.floor(250));
     const green = Math.floor(Math.random() * Math.floor(100));
@@ -125,7 +138,6 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   }
 
   private canvasRef: Canvas;
-  private nodeEditorRef: NodeEditor;
   private static readonly STYLES = {
     wrapper: {
       display: 'flex' as 'flex',

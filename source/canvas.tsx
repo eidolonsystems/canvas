@@ -105,8 +105,8 @@ export class Canvas extends React.Component<Properties> {
     let endPoint = {x: 0, y: 0};
     const intersection = this.computeMagnitude(head, tail) - Canvas.radius;
     let labelPoint = {
-      x: tail.x + (intersection / 3 * unitVector.x),
-      y: tail.y + (intersection / 3 * unitVector.y)
+      x: tail.x + (intersection / 4 * unitVector.x),
+      y: tail.y + (intersection / 4 * unitVector.y)
     };
     labelPoint = {
       x: labelPoint.x - (20 * unitVector.y),
