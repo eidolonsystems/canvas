@@ -52,6 +52,9 @@ export class Scene {
   }
 
   public findEdge(head: Node, tail: Node): Edge {
+    if(head === null || tail === null) {
+      return null;
+    }
     for(let i = 0; i < this._edges.length; ++i) {
       const edge = this._edges[i];
       if(edge.head.id === head.id && edge.tail.id === tail.id) {
