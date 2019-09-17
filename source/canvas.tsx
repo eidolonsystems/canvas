@@ -110,23 +110,26 @@ export class Canvas extends React.Component<Properties, State> {
       return;
     }
     const ctx = this.canvasRef.getContext('2d');
-    const origin = {
+    const intersection = {
       x: edge.head.position.x + Canvas.radius ,
-      y: edge.head.position.y 
+      y: edge.head.position.y
+    };
+    const loopCenter = {
+      x: edge.head.position.x + (Canvas.radius / 2) + Canvas.arrowLenght,
+      y: edge.head.position.y + (Canvas.radius / 2) + (2*Canvas.arrowWidth)
     };
     const somePoint = ({
-      x: edge.head.position.x + Canvas.radius + 50,
+      x: edge.head.position.x + Canvas.radius + 50 + Canvas.arrowLenght,
       y: edge.head.position.y
     });
     ctx.beginPath();
-    ctx.ellipse(
-      somePoint.x, somePoint.y, 50, 20,
-      0, 0, 2 * Math.PI);
+    ctx.arc(loopCenter.x, loopCenter.y, Canvas.radius,
+      Math.PI, ((Math.PI / 2) * -1) + 0.5, true);
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
-    this.drawTriangleForLoop(edge.head.position, origin);
+    this.drawTriangleForLoop(edge.head.position, intersection);
     //drawing da arrow
   }
 
@@ -224,7 +227,7 @@ export class Canvas extends React.Component<Properties, State> {
     const unitVector = {
       x: (origin.x - nodePosition.x) / magnitude,
       y: (origin.y - nodePosition.y) / magnitude};
-    const arrowHead = {
+    const helper = {
         x: origin.x + (Canvas.arrowLenght * unitVector.x),
         y: origin.y + (Canvas.arrowLenght * unitVector.y)
     };
@@ -233,19 +236,16 @@ export class Canvas extends React.Component<Properties, State> {
       y: unitVector.x
     };
     const point2 = {
-      x: origin.x + (perpendicular.x * Canvas.arrowWidth),
-      y: origin.y + (perpendicular.y * Canvas.arrowWidth)
+      x: helper.x + (perpendicular.x * Canvas.arrowWidth),
+      y: helper.y + (perpendicular.y * Canvas.arrowWidth)
     };
     const point3 = {
-      x: origin.x - (perpendicular.x * Canvas.arrowWidth),
-      y: origin.y - (perpendicular.y * Canvas.arrowWidth)
+      x: helper.x - (perpendicular.x * Canvas.arrowWidth),
+      y: helper.y - (perpendicular.y * Canvas.arrowWidth)
     };
-
-    console.log(arrowHead, point2, point3);
-
     const ctx = this.canvasRef.getContext('2d');
     ctx.beginPath();
-    ctx.moveTo(arrowHead.x, arrowHead.y);
+    ctx.moveTo(origin.x, origin.y);
     ctx.lineTo(point2.x, point2.y);
     ctx.lineTo(point3.x, point3.y);
     ctx.fillStyle = 'black';
