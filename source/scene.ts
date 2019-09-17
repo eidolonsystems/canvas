@@ -59,8 +59,6 @@ export class Scene {
   }
 
   public connectNodes(head: Node, tail: Node) {
-    console.log('head', head.name, 'tail', tail.name);
-    console.log(this.findEdgeIndex(head, tail));
     if(this.findEdgeIndex(head, tail) >= 0) {
       return;
     }

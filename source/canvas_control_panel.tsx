@@ -34,15 +34,15 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             onNodeSelected={this.newCurrentNodeSelected.bind(this)}
             onClearNodes={this.clearSelectedNodes.bind(this)}
             ref={(thing) => this.canvasRef = thing}/>
-          <NodeEditor
-            node={this.state.currentNode}
-            submitUpdatedNode={this.nodeValuesUpdated.bind(this)}/>
           <EdgeEditor
             edge={this.state.scene.findEdge(
               this.state.currentNode,
               this.state.previousNode
             )}
             submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>
+          <NodeEditor
+            node={this.state.currentNode}
+            submitUpdatedNode={this.nodeValuesUpdated.bind(this)}/>
         </div>
         <div style={CanvasControlPanel.STYLES.controlPanel}>
           <button onClick={this.addNode.bind(this)}
@@ -96,7 +96,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     this.setState({scene: this.state.scene});
   }
 
-  public addNode() {
+  private addNode() {
     const red = Math.floor(Math.random() * Math.floor(250));
     const green = Math.floor(Math.random() * Math.floor(100));
     const blue = Math.floor(Math.random() * Math.floor(230));
@@ -112,7 +112,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     this.setState({scene: this.state.scene});
   }
 
-  public removeNode() {
+  private removeNode() {
     this.state.scene.deleteNode(this.state.currentNode);
     this.setState({
       currentNode: null,
@@ -121,7 +121,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
       });
   }
 
-  public connectNodes() {
+  private connectNodes() {
     if(this.state.currentNode !== null  && this.state.previousNode !== null) {
       this.state.scene.connectNodes(
         this.state.currentNode, this.state.previousNode);
@@ -129,7 +129,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     }
   }
 
-  public disconnectNode() {
+  private disconnectNode() {
     if(this.state.currentNode !== null  && this.state.previousNode !== null) {
       this.state.scene.removeEdge(
         this.state.currentNode, this.state.previousNode);
@@ -138,6 +138,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   }
 
   private canvasRef: Canvas;
+
   private static readonly STYLES = {
     wrapper: {
       display: 'flex' as 'flex',

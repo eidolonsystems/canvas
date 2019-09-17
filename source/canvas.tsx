@@ -13,16 +13,25 @@ interface Properties {
   onClearNodes?: () => void;
 }
 
-export class Canvas extends React.Component<Properties> {
+interface State {
+  isMouseInside: boolean;
+}
+
+export class Canvas extends React.Component<Properties, State> {
   constructor(props: Properties) {
     super(props);
+    this.state = {
+      isMouseInside: false
+    };
   }
 
   public render(): JSX.Element {
     return (
       <canvas ref={(thing) => this.canvasRef = thing}
           height={this.props.height}
-          width={this.props.width}>
+          width={this.props.width}
+          onMouseEnter={this.onMouseEnter.bind(this)}
+          onMouseLeave={this.onMouseLeave.bind(this)}>
         {'Your browser does not support HTML5 Canvas.'}
       </canvas>);
   }
@@ -34,7 +43,7 @@ export class Canvas extends React.Component<Properties> {
     this.canvasRef.addEventListener('pointerdown', this.onMouseDown.bind(this));
     this.canvasRef.addEventListener('pointerup', this.onMouseUp.bind(this));
     this.canvasRef.addEventListener('pointermove', this.onMouseMove.bind(this));
-    this.canvasRef.addEventListener('keydown', this.onKeyDown.bind(this));
+    document.addEventListener('keydown', this.onKeyDown.bind(this));
   }
 
   public componentDidUpdate() {
@@ -47,7 +56,7 @@ export class Canvas extends React.Component<Properties> {
     this.canvasRef.removeEventListener('pointerup', this.onMouseUp.bind(this));
     this.canvasRef.removeEventListener('pointermove',
       this.onMouseMove.bind(this));
-    this.canvasRef.removeEventListener('keydown', this.onKeyDown.bind(this));
+    document.removeEventListener('keydown', this.onKeyDown.bind(this));
   }
 
   private drawMachine() {
@@ -105,8 +114,8 @@ export class Canvas extends React.Component<Properties> {
     let endPoint = {x: 0, y: 0};
     const intersection = this.computeMagnitude(head, tail) - Canvas.radius;
     let labelPoint = {
-      x: tail.x + (intersection / 3.5 * unitVector.x),
-      y: tail.y + (intersection / 3.5 * unitVector.y)
+      x: tail.x + (intersection / 2.5 * unitVector.x),
+      y: tail.y + (intersection / 2.5 * unitVector.y)
     };
     labelPoint = {
       x: labelPoint.x - (20 * unitVector.y),
@@ -207,6 +216,16 @@ export class Canvas extends React.Component<Properties> {
     }
   }
 
+  private onMouseEnter() {
+    console.log('enter');
+    this.setState({isMouseInside: true});
+  }
+
+  private onMouseLeave() {
+     console.log('leave');
+    this.setState({isMouseInside: false});
+  }
+
   private onMouseUp(event: PointerEvent) {
     this.isMouseDown = false;
     if(this.machineState === 'repositioning') {
@@ -222,10 +241,13 @@ export class Canvas extends React.Component<Properties> {
   }
 
   private onKeyDown(event: KeyboardEvent) {
-    if(event.key === 'Delete' || event.key === 'Backspace') {
-      if(this.props.currentNode !== null) {
-        this.props.scene.deleteNode(this.props.currentNode);
-        this.drawMachine();
+    console.log('BUTTON PRESSS');
+    if(this.state.isMouseInside) {
+      if(event.key === 'Delete' || event.key === 'Backspace') {
+        if(this.props.currentNode !== null) {
+          this.props.scene.deleteNode(this.props.currentNode);
+          this.drawMachine();
+        }
       }
     }
   }
