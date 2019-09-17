@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Canvas } from './canvas';
+import { Edge } from './edge';
 import { EdgeEditor } from './edge_editor';
 import { Node } from './node';
 import { NodeEditor } from './node_editor';
@@ -89,9 +90,9 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     this.setState({currentNode: this.state.currentNode});
   }
 
-  private edgesValueUpdated(name: string) {
+  private edgesValueUpdated(edge: Edge, name: string) {
     if(name !== '') {
-      this.state.currentNode.name = name;
+      edge.name = name;
     }
     this.setState({scene: this.state.scene});
   }

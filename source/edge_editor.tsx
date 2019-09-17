@@ -3,7 +3,7 @@ import { Edge } from './edge';
 
 interface Properties {
   edge: Edge;
-  submitUpdatedEdge?: (name: string) => void;
+  submitUpdatedEdge?: (edge: Edge, name: string) => void;
 }
 
 export class EdgeEditor extends React.Component<Properties> {
@@ -33,7 +33,8 @@ export class EdgeEditor extends React.Component<Properties> {
   }
 
   private onSubmit() {
-    this.props.submitUpdatedEdge(this.nameInputRef.value.toString());
+    this.props.submitUpdatedEdge(
+      this.props.edge, this.nameInputRef.value.toString());
   }
 
   private nameInputRef: HTMLInputElement;
