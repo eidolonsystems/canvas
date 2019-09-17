@@ -34,7 +34,7 @@ export class Scene {
 
   public removeEdge(head: Node, tail: Node) {
     const index = this.findEdgeIndex(head, tail);
-    if(this.findEdgeIndex(head, tail) > 0) {
+    if(this.findEdgeIndex(head, tail) >= 0) {
       this._edges.splice(index, 1);
     }
   }
