@@ -65,7 +65,11 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.fillStyle = '#f2f2f2';
     ctx.fillRect(0, 0, this.canvasRef.width, this.canvasRef.height);
     for(const edge of this.props.scene.edges) {
-      this.drawArrow(edge);
+      if(edge.head === edge.tail) {
+        this.drawLoop(edge);
+      } else {
+        this.drawArrow(edge);
+      }
     }
     for(const node of this.props.scene.nodes) {
       this.drawCircle(node);
@@ -99,6 +103,30 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.fillStyle = 'black';
     ctx.fillText(node.name, node.position.x, node.position.y);
     ctx.closePath();
+  }
+
+  private drawLoop(edge: Edge) {
+    if(edge.head === null) {
+      return;
+    }
+    const ctx = this.canvasRef.getContext('2d');
+    const origin = {
+      x: edge.head.position.x,
+      y: edge.head.position.y 
+    };
+    const somePoint = ({
+      x: edge.head.position.x + Canvas.radius + 50,
+      y: edge.head.position.y
+    });
+    ctx.beginPath();
+    ctx.ellipse(
+      somePoint.x, somePoint.y, 50, 20,
+      0, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.closePath();
+    //drawing da arrow
   }
 
   private drawArrow(edge: Edge) {

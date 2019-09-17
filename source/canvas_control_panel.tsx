@@ -89,7 +89,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     this.setState({currentNode: this.state.currentNode});
   }
 
-  private edgesValueUpdated(name: string, color: string) {
+  private edgesValueUpdated(name: string) {
     if(name !== '') {
       this.state.currentNode.name = name;
     }
@@ -122,10 +122,17 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   }
 
   private connectNodes() {
-    if(this.state.currentNode !== null  && this.state.previousNode !== null) {
+    if(this.state.currentNode !== null) {
+      if(this.state.previousNode !== null) {
       this.state.scene.connectNodes(
         this.state.currentNode, this.state.previousNode);
       this.setState({scene: this.state.scene});
+      } else {
+        console.log('LOOP DE LOOOP');
+        this.state.scene.connectNodes(
+          this.state.currentNode, this.state.currentNode);
+        this.setState({scene: this.state.scene});
+      }
     }
   }
 
