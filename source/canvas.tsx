@@ -116,7 +116,7 @@ export class Canvas extends React.Component<Properties, State> {
     };
     const loopCenter = {
       x: edge.head.position.x + (Canvas.radius / 2) + Canvas.arrowLenght,
-      y: edge.head.position.y + (Canvas.radius / 2) + (2*Canvas.arrowWidth)
+      y: edge.head.position.y + (Canvas.radius / 2) + (2 * Canvas.arrowWidth)
     };
     const somePoint = ({
       x: edge.head.position.x + Canvas.radius + 50 + Canvas.arrowLenght,
@@ -133,7 +133,6 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.fillText(edge.name, loopCenter.x + 5, loopCenter.y + 5);
     ctx.closePath();
     this.drawTriangleForLoop(edge.head.position, intersection);
-    //drawing da arrow
   }
 
   private drawArrow(edge: Edge) {
@@ -223,9 +222,7 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.closePath();
   }
 
-
   private drawTriangleForLoop(nodePosition: Position, origin: Position) {
-    console.log('triangle');
     const magnitude = this.computeMagnitude(nodePosition, origin);
     const unitVector = {
       x: (origin.x - nodePosition.x) / magnitude,
@@ -285,12 +282,10 @@ export class Canvas extends React.Component<Properties, State> {
   }
 
   private onMouseEnter() {
-    console.log('enter');
     this.setState({isMouseInside: true});
   }
 
   private onMouseLeave() {
-     console.log('leave');
     this.setState({isMouseInside: false});
   }
 
@@ -309,7 +304,6 @@ export class Canvas extends React.Component<Properties, State> {
   }
 
   private onKeyDown(event: KeyboardEvent) {
-    console.log('BUTTON PRESSS');
     if(this.state.isMouseInside) {
       if(event.key === 'Delete' || event.key === 'Backspace') {
         if(this.props.currentNode !== null) {
