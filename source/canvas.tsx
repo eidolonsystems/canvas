@@ -128,6 +128,9 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
     ctx.stroke();
+    ctx.font = '12px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText(edge.name, loopCenter.x + 5, loopCenter.y + 5);
     ctx.closePath();
     this.drawTriangleForLoop(edge.head.position, intersection);
     //drawing da arrow
