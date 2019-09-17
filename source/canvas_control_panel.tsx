@@ -25,27 +25,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   public render(): JSX.Element {
     return (
       <div style={CanvasControlPanel.STYLES.wrapper}>
-        <div style={CanvasControlPanel.STYLES.controlPanel}>
-          <Canvas
-            scene={this.state.scene}
-            height={500}
-            width={500}
-            previousNode={this.state.previousNode}
-            currentNode={this.state.currentNode}
-            onNodeSelected={this.newCurrentNodeSelected.bind(this)}
-            onClearNodes={this.clearSelectedNodes.bind(this)}
-            ref={(thing) => this.canvasRef = thing}/>
-          <EdgeEditor
-            edge={this.state.scene.findEdge(
-              this.state.currentNode,
-              this.state.previousNode
-            )}
-            submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>
-          <NodeEditor
-            node={this.state.currentNode}
-            submitUpdatedNode={this.nodeValuesUpdated.bind(this)}/>
-        </div>
-        <div style={CanvasControlPanel.STYLES.controlPanel}>
+                <div style={CanvasControlPanel.STYLES.controlPanel}>
           <button onClick={this.addNode.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
             Add Node
@@ -62,6 +42,26 @@ export class CanvasControlPanel extends React.Component<{}, State> {
               style={CanvasControlPanel.STYLES.button}>
             Remove Edge
           </button>
+        </div>
+        <div style={CanvasControlPanel.STYLES.controlPanel}>
+          <Canvas
+            scene={this.state.scene}
+            height={500}
+            width={1000}
+            previousNode={this.state.previousNode}
+            currentNode={this.state.currentNode}
+            onNodeSelected={this.newCurrentNodeSelected.bind(this)}
+            onClearNodes={this.clearSelectedNodes.bind(this)}
+            ref={(thing) => this.canvasRef = thing}/>
+          <EdgeEditor
+            edge={this.state.scene.findEdge(
+              this.state.currentNode,
+              this.state.previousNode
+            )}
+            submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>
+          <NodeEditor
+            node={this.state.currentNode}
+            submitUpdatedNode={this.nodeValuesUpdated.bind(this)}/>
         </div>
       </div>);
   }
@@ -162,6 +162,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     },
     button: {
       margin: '10px',
+      marginLeft: '2px',
       paddingBottom: '10px',
       paddingTop: '10px',
       borderRadius: '8px',
