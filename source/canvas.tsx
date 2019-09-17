@@ -111,7 +111,7 @@ export class Canvas extends React.Component<Properties, State> {
     }
     const ctx = this.canvasRef.getContext('2d');
     const origin = {
-      x: edge.head.position.x,
+      x: edge.head.position.x + Canvas.radius ,
       y: edge.head.position.y 
     };
     const somePoint = ({
@@ -126,6 +126,7 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
+    this.drawTriangleForLoop(edge.head.position, origin);
     //drawing da arrow
   }
 
@@ -209,6 +210,42 @@ export class Canvas extends React.Component<Properties, State> {
     const ctx = this.canvasRef.getContext('2d');
     ctx.beginPath();
     ctx.moveTo(point1.x, point1.y);
+    ctx.lineTo(point2.x, point2.y);
+    ctx.lineTo(point3.x, point3.y);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+    ctx.closePath();
+  }
+
+
+  private drawTriangleForLoop(nodePosition: Position, origin: Position) {
+    console.log('triangle');
+    const magnitude = this.computeMagnitude(nodePosition, origin);
+    const unitVector = {
+      x: (origin.x - nodePosition.x) / magnitude,
+      y: (origin.y - nodePosition.y) / magnitude};
+    const arrowHead = {
+        x: origin.x + (Canvas.arrowLenght * unitVector.x),
+        y: origin.y + (Canvas.arrowLenght * unitVector.y)
+    };
+    const perpendicular = {
+      x: -unitVector.y,
+      y: unitVector.x
+    };
+    const point2 = {
+      x: origin.x + (perpendicular.x * Canvas.arrowWidth),
+      y: origin.y + (perpendicular.y * Canvas.arrowWidth)
+    };
+    const point3 = {
+      x: origin.x - (perpendicular.x * Canvas.arrowWidth),
+      y: origin.y - (perpendicular.y * Canvas.arrowWidth)
+    };
+
+    console.log(arrowHead, point2, point3);
+
+    const ctx = this.canvasRef.getContext('2d');
+    ctx.beginPath();
+    ctx.moveTo(arrowHead.x, arrowHead.y);
     ctx.lineTo(point2.x, point2.y);
     ctx.lineTo(point3.x, point3.y);
     ctx.fillStyle = 'black';
