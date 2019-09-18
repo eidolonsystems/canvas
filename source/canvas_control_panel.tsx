@@ -34,7 +34,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
           </button>
           <button onClick={this.removeNode.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
-            Remove Node
+            Delete Node
           </button>
           <button onClick={this.connectNodes.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
@@ -42,7 +42,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
           </button>
           <button onClick={this.disconnectNode.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
-            Disconnect Node
+            Disconnect Nodes
           </button>
           <button onClick={this.deleteEdge.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
@@ -62,10 +62,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             onEdgeSelected={this.newEdgeSelected.bind(this)}
             ref={(thing) => this.canvasRef = thing}/>
           <EdgeEditor
-            edge={this.state.scene.findEdge(
-              this.state.currentNode,
-              this.state.previousNode
-            )}
+            edge={this.state.currentEdge}
             submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>
           <NodeEditor
             node={this.state.currentNode}
@@ -75,7 +72,6 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   }
 
   private newEdgeSelected(edge: Edge) {
-    console.log('NEW EDGE');
     this.setState({
       currentEdge: edge
     });
