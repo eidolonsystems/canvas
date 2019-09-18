@@ -37,11 +37,11 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             Delete Node
           </button>
           <button onClick={this.connectNodes.bind(this)}
-              style={CanvasControlPanel.STYLES.button}>
+              style={CanvasControlPanel.STYLES.altButton}>
             Connect Nodes
           </button>
           <button onClick={this.disconnectNode.bind(this)}
-              style={CanvasControlPanel.STYLES.button}>
+              style={CanvasControlPanel.STYLES.altButton}>
             Disconnect Nodes
           </button>
           <button onClick={this.deleteEdge.bind(this)}
@@ -186,6 +186,16 @@ export class CanvasControlPanel extends React.Component<{}, State> {
       padding: '50px'
     },
     button: {
+      backgroundColor: '#c4c4c4',
+      margin: '10px',
+      marginLeft: '2px',
+      paddingBottom: '10px',
+      paddingTop: '10px',
+      borderRadius: '8px',
+      width: '80px'
+    },
+    altButton: {
+      backgroundColor: '#ebebeb',
       margin: '10px',
       marginLeft: '2px',
       paddingBottom: '10px',
