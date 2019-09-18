@@ -110,9 +110,9 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   }
 
   private addNode() {
-    const red = Math.floor(Math.random() * Math.floor(250));
+    const red = Math.floor(Math.random() * Math.floor(150));
     const green = Math.floor(Math.random() * Math.floor(100));
-    const blue = Math.floor(Math.random() * Math.floor(230));
+    const blue = Math.floor(Math.random() * Math.floor(250));
     const someX = Math.floor(Math.random() * Math.floor(500));
     const someY = Math.floor(Math.random() * Math.floor(500));
     const newNode = new Node(
