@@ -32,12 +32,20 @@ export class Scene {
     }
   }
 
-  public removeEdge(head: Node, tail: Node) {
+  public disconnectNode(head: Node, tail: Node) {
     const index = this.findEdgeIndex(head, tail);
     if(this.findEdgeIndex(head, tail) >= 0) {
       this._edges.splice(index, 1);
     }
   }
+
+  public deleteEdge(edge: Edge) {
+    const index = this.findEdgeIndexFromEdge(edge);
+    if(index >= 0) {
+      this._edges.splice(index, 1);
+    }
+  }
+
 
   public getRandomNode(): Node {
     const random =
@@ -76,6 +84,16 @@ export class Scene {
     for(let i = 0; i < this._edges.length; ++i) {
       const edge = this._edges[i];
       if(edge.head.id === head.id && edge.tail.id === tail.id) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  private findEdgeIndexFromEdge(someEdge: Edge): number {
+    for(let i = 0; i < this._edges.length; ++i) {
+      const edge = this._edges[i];
+      if(edge.id === someEdge.id) {
         return i;
       }
     }
