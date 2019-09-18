@@ -46,8 +46,8 @@ export class CanvasControlPanel extends React.Component<{}, State> {
         <div style={CanvasControlPanel.STYLES.controlPanel}>
           <Canvas
             scene={this.state.scene}
-            height={500}
-            width={1000}
+            height={600}
+            width={800}
             previousNode={this.state.previousNode}
             currentNode={this.state.currentNode}
             onNodeSelected={this.newCurrentNodeSelected.bind(this)}

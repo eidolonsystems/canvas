@@ -3,6 +3,12 @@ import { Edge } from './edge';
 import { Position, Node } from './node';
 import { Scene } from './scene';
 
+interface Triangle {
+  point1: Position;
+  point2: Position;
+  point3: Position;
+}
+
 interface Properties {
   width: number;
   height: number;
@@ -23,6 +29,7 @@ export class Canvas extends React.Component<Properties, State> {
     this.state = {
       isMouseInside: false
     };
+    this.triangles = new Map<Edge, Triangle>();
   }
 
   public render(): JSX.Element {
@@ -60,6 +67,7 @@ export class Canvas extends React.Component<Properties, State> {
   }
 
   private drawMachine() {
+    this.triangles.clear();
     const ctx = this.canvasRef.getContext('2d');
     ctx.clearRect(0, 0, this.canvasRef.width, this.canvasRef.height);
     ctx.fillStyle = '#f2f2f2';
@@ -73,6 +81,27 @@ export class Canvas extends React.Component<Properties, State> {
     }
     for(const node of this.props.scene.nodes) {
       this.drawCircle(node);
+    }
+
+    for (const edge of this.props.scene.edges) {
+      const triangle = this.triangles.get(edge);
+      const origin = triangle.point1;
+      const vector1 = {
+        x: triangle.point2.x - origin.x,
+        y: triangle.point2.y - origin.y
+      };
+      const vector2 = {
+        x: triangle.point3.x - origin.x,
+        y: triangle.point3.y - origin.y
+      };
+
+      ctx.beginPath();
+      ctx.moveTo(triangle.point1.x, triangle.point1.y);
+      ctx.lineTo(triangle.point2.x, triangle.point2.y);
+      ctx.lineTo(triangle.point3.x, triangle.point3.y);
+      ctx.fillStyle = 'red';
+      ctx.fill();
+      ctx.closePath();
     }
   }
 
@@ -111,17 +140,13 @@ export class Canvas extends React.Component<Properties, State> {
     }
     const ctx = this.canvasRef.getContext('2d');
     const intersection = {
-      x: edge.head.position.x + Canvas.radius ,
+      x: edge.head.position.x + Canvas.radius,
       y: edge.head.position.y
     };
     const loopCenter = {
       x: edge.head.position.x + (Canvas.radius / 2) + Canvas.arrowLenght,
-      y: edge.head.position.y + (Canvas.radius / 2) + (2 * Canvas.arrowWidth)
+      y: edge.head.position.y + (Canvas.radius / 2) + (Canvas.arrowWidth*2)
     };
-    const somePoint = ({
-      x: edge.head.position.x + Canvas.radius + 50 + Canvas.arrowLenght,
-      y: edge.head.position.y
-    });
     ctx.beginPath();
     ctx.arc(loopCenter.x, loopCenter.y, Canvas.radius,
       Math.PI, ((Math.PI / 2) * -1) + 0.5, true);
@@ -132,7 +157,7 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.fillStyle = 'black';
     ctx.fillText(edge.name, loopCenter.x + 5, loopCenter.y + 5);
     ctx.closePath();
-    this.drawTriangleForLoop(edge.head.position, intersection);
+    this.drawTriangleForLoop(edge, edge.head.position, intersection);
   }
 
   private drawArrow(edge: Edge) {
@@ -162,7 +187,7 @@ export class Canvas extends React.Component<Properties, State> {
       x: tail.x + (intersection * unitVector.x),
       y: tail.y + (intersection * unitVector.y)
     };
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     ctx.strokeStyle = 'black';
     ctx.lineTo(endPoint.x, endPoint.y);
     ctx.stroke();
@@ -220,16 +245,18 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.fillStyle = 'black';
     ctx.fill();
     ctx.closePath();
+    this.triangles.set(edge, {point1, point2, point3});
   }
 
-  private drawTriangleForLoop(nodePosition: Position, origin: Position) {
-    const magnitude = this.computeMagnitude(nodePosition, origin);
+  private drawTriangleForLoop(
+      edge: Edge, nodePosition: Position, point1: Position) {
+    const magnitude = this.computeMagnitude(nodePosition, point1);
     const unitVector = {
-      x: (origin.x - nodePosition.x) / magnitude,
-      y: (origin.y - nodePosition.y) / magnitude};
+      x: (point1.x - nodePosition.x) / magnitude,
+      y: (point1.y - nodePosition.y) / magnitude};
     const helper = {
-        x: origin.x + (Canvas.arrowLenght * unitVector.x),
-        y: origin.y + (Canvas.arrowLenght * unitVector.y)
+        x: point1.x + (Canvas.arrowLenght * unitVector.x),
+        y: point1.y + (Canvas.arrowLenght * unitVector.y)
     };
     const perpendicular = {
       x: -unitVector.y,
@@ -245,12 +272,13 @@ export class Canvas extends React.Component<Properties, State> {
     };
     const ctx = this.canvasRef.getContext('2d');
     ctx.beginPath();
-    ctx.moveTo(origin.x, origin.y);
+    ctx.moveTo(point1.x, point1.y);
     ctx.lineTo(point2.x, point2.y);
     ctx.lineTo(point3.x, point3.y);
     ctx.fillStyle = 'black';
     ctx.fill();
     ctx.closePath();
+    this.triangles.set(edge, {point1, point2, point3});
   }
 
   private computeMagnitude(point1: Position, point2: Position) {
@@ -268,10 +296,42 @@ export class Canvas extends React.Component<Properties, State> {
     return null;
   }
 
+  private getEdge(newX: number, newY: number) {
+    for (const edge of this.props.scene.edges) {
+      const triangle = this.triangles.get(edge);
+      const origin = triangle.point1;
+      const mysteryPoint = {x: newX, y: newY};
+      const vector1 = {
+        x: triangle.point2.x - origin.x,
+        y: triangle.point2.y - origin.y
+      };
+      const vector2 = {
+        x: triangle.point3.x - origin.x,
+        y: triangle.point3.y - origin.y,
+      };
+      const a = (this.determinant(mysteryPoint, vector2) -
+        this.determinant(origin, vector2)) /
+        this.determinant(vector1, vector2);
+      const b = -1 * ((this.determinant(mysteryPoint, vector1) -
+        this.determinant(origin, vector1)) /
+        this.determinant(vector1, vector2));
+      if(a > 0 && b > 0 && a + b < 1) {
+        return edge;
+      }
+    }
+    return null;
+  }
+
+  private determinant(u: Position, v: Position) {
+    return ((u.x * v.y) - (u.y * v.x));
+  }
+
   private onMouseDown(event: PointerEvent) {
     this.isMouseDown = true;
     if(this.machineState === 'rest') {
       const newNode = this.getNode(event.offsetX, event.offsetY);
+      console.log(this.getEdge(event.offsetX, event.offsetY));
+      console.log(this.triangles);
       if(newNode === null) {
         this.props.onClearNodes();
       } else {
@@ -329,7 +389,8 @@ export class Canvas extends React.Component<Properties, State> {
   private machineState: string;
   private canvasRef: HTMLCanvasElement;
   private isMouseDown: boolean;
-  private static radius = 28;
-  private static arrowLenght = 10;
-  private static arrowWidth = 5;
+  private triangles: Map<Edge,Triangle>;
+  private static readonly radius = 28;
+  private static readonly arrowLenght = 10;
+  private static readonly arrowWidth = 7;
 }
