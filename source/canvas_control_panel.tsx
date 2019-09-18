@@ -8,6 +8,7 @@ import { Scene } from './scene';
 
 interface State {
   scene: Scene;
+  currentEdge: Edge;
   currentNode: Node;
   previousNode: Node;
 }
@@ -17,6 +18,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     super(props);
     this.state = {
       scene: new Scene([], []),
+      currentEdge: null,
       currentNode: null,
       previousNode: null
     };
@@ -36,11 +38,15 @@ export class CanvasControlPanel extends React.Component<{}, State> {
           </button>
           <button onClick={this.connectNodes.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
-            Add Edge
+            Connect Nodes
           </button>
           <button onClick={this.disconnectNode.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
-            Remove Edge
+            Disconnect Node
+          </button>
+          <button onClick={null}
+              style={CanvasControlPanel.STYLES.button}>
+            Delete Edge
           </button>
         </div>
         <div style={CanvasControlPanel.STYLES.controlPanel}>
@@ -50,8 +56,10 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             width={800}
             previousNode={this.state.previousNode}
             currentNode={this.state.currentNode}
+            selectedEdge={this.state.currentEdge}
             onNodeSelected={this.newCurrentNodeSelected.bind(this)}
             onClearNodes={this.clearSelectedNodes.bind(this)}
+            onEdgeSelected={this.newEdgeSelected.bind(this)}
             ref={(thing) => this.canvasRef = thing}/>
           <EdgeEditor
             edge={this.state.scene.findEdge(
@@ -66,6 +74,13 @@ export class CanvasControlPanel extends React.Component<{}, State> {
       </div>);
   }
 
+  private newEdgeSelected(edge: Edge) {
+    console.log('NEW EDGE');
+    this.setState({
+      currentEdge: edge
+    });
+  }
+
   private newCurrentNodeSelected(node: Node) {
     this.setState({
       previousNode: this.state.currentNode,
@@ -75,6 +90,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
 
   private clearSelectedNodes() {
     this.setState({
+      currentEdge: null,
       previousNode: null,
       currentNode: null
     });
@@ -129,7 +145,6 @@ export class CanvasControlPanel extends React.Component<{}, State> {
         this.state.currentNode, this.state.previousNode);
       this.setState({scene: this.state.scene});
       } else {
-        console.log('LOOP DE LOOOP');
         this.state.scene.connectNodes(
           this.state.currentNode, this.state.currentNode);
         this.setState({scene: this.state.scene});
@@ -166,7 +181,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
       paddingBottom: '10px',
       paddingTop: '10px',
       borderRadius: '8px',
-      width: '65px'
+      width: '80px'
     }
   };
 }

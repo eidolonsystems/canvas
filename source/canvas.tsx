@@ -15,7 +15,9 @@ interface Properties {
   scene: Scene;
   currentNode?: Node | null;
   previousNode?: Node | null;
+  selectedEdge?: Edge | null;
   onNodeSelected?: (node: Node) => void;
+  onEdgeSelected?: (edge: Edge) => void;
   onClearNodes?: () => void;
 }
 
@@ -82,27 +84,6 @@ export class Canvas extends React.Component<Properties, State> {
     for(const node of this.props.scene.nodes) {
       this.drawCircle(node);
     }
-
-    for (const edge of this.props.scene.edges) {
-      const triangle = this.triangles.get(edge);
-      const origin = triangle.point1;
-      const vector1 = {
-        x: triangle.point2.x - origin.x,
-        y: triangle.point2.y - origin.y
-      };
-      const vector2 = {
-        x: triangle.point3.x - origin.x,
-        y: triangle.point3.y - origin.y
-      };
-
-      ctx.beginPath();
-      ctx.moveTo(triangle.point1.x, triangle.point1.y);
-      ctx.lineTo(triangle.point2.x, triangle.point2.y);
-      ctx.lineTo(triangle.point3.x, triangle.point3.y);
-      ctx.fillStyle = 'red';
-      ctx.fill();
-      ctx.closePath();
-    }
   }
 
   private drawCircle(node: Node) {
@@ -115,7 +96,7 @@ export class Canvas extends React.Component<Properties, State> {
     if(this.props.currentNode === node) {
       ctx.beginPath();
       ctx.lineWidth = 3;
-      ctx.strokeStyle = '#cc004e';
+      ctx.strokeStyle = '#d600af';
       ctx.arc(node.position.x, node.position.y, Canvas.radius, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.closePath();
@@ -145,12 +126,16 @@ export class Canvas extends React.Component<Properties, State> {
     };
     const loopCenter = {
       x: edge.head.position.x + (Canvas.radius / 2) + Canvas.arrowLenght,
-      y: edge.head.position.y + (Canvas.radius / 2) + (Canvas.arrowWidth*2)
+      y: edge.head.position.y + (Canvas.radius / 2) + (Canvas.arrowWidth * 1.25)
     };
     ctx.beginPath();
     ctx.arc(loopCenter.x, loopCenter.y, Canvas.radius,
       Math.PI, ((Math.PI / 2) * -1) + 0.5, true);
-    ctx.strokeStyle = 'black';
+    if(edge === this.props.selectedEdge) {
+      ctx.strokeStyle = '#940079';
+    } else {
+      ctx.strokeStyle = 'black';
+    }
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.font = '12px Arial';
@@ -181,14 +166,18 @@ export class Canvas extends React.Component<Properties, State> {
       y: labelPoint.y + (20 * unitVector.x)
     };
     ctx.font = '500 14px Arial';
-    ctx.fillStyle = 'navy';
+    ctx.fillStyle = 'black';
     ctx.fillText(edge.name, labelPoint.x, labelPoint.y);
     endPoint = {
       x: tail.x + (intersection * unitVector.x),
       y: tail.y + (intersection * unitVector.y)
     };
     ctx.lineWidth = 2;
-    ctx.strokeStyle = 'black';
+    if(edge === this.props.selectedEdge) {
+      ctx.strokeStyle = '#940079';
+    } else {
+      ctx.strokeStyle = 'black';
+    }
     ctx.lineTo(endPoint.x, endPoint.y);
     ctx.stroke();
     ctx.closePath();
@@ -242,7 +231,11 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.moveTo(point1.x, point1.y);
     ctx.lineTo(point2.x, point2.y);
     ctx.lineTo(point3.x, point3.y);
-    ctx.fillStyle = 'black';
+    if(edge === this.props.selectedEdge) {
+      ctx.fillStyle = '#940079';
+    } else {
+      ctx.fillStyle = 'black';
+    }
     ctx.fill();
     ctx.closePath();
     this.triangles.set(edge, {point1, point2, point3});
@@ -275,7 +268,11 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.moveTo(point1.x, point1.y);
     ctx.lineTo(point2.x, point2.y);
     ctx.lineTo(point3.x, point3.y);
-    ctx.fillStyle = 'black';
+    if(edge === this.props.selectedEdge) {
+      ctx.fillStyle = '#940079';
+    } else {
+      ctx.fillStyle = 'black';
+    }
     ctx.fill();
     ctx.closePath();
     this.triangles.set(edge, {point1, point2, point3});
@@ -330,12 +327,14 @@ export class Canvas extends React.Component<Properties, State> {
     this.isMouseDown = true;
     if(this.machineState === 'rest') {
       const newNode = this.getNode(event.offsetX, event.offsetY);
-      console.log(this.getEdge(event.offsetX, event.offsetY));
-      console.log(this.triangles);
+      const newEdge = this.getEdge(event.offsetX, event.offsetY);
       if(newNode === null) {
         this.props.onClearNodes();
-      } else {
+      }  else {
         this.props.onNodeSelected(newNode);
+      }
+      if(newEdge !== null) {
+        this.props.onEdgeSelected(newEdge);
       }
       this.restState();
     }
