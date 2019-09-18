@@ -48,6 +48,15 @@ export class CanvasControlPanel extends React.Component<{}, State> {
               style={CanvasControlPanel.STYLES.button}>
             Delete Edge
           </button>
+          <button>
+            Make Head
+          </button>
+          <button>
+            Make Tail
+          </button>
+          <button>
+            Change Ends
+          </button>
         </div>
         <div style={CanvasControlPanel.STYLES.controlPanel}>
           <Canvas
@@ -150,7 +159,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
 
   private disconnectNode() {
     if(this.state.currentNode !== null  && this.state.previousNode !== null) {
-      this.state.scene.disconnectNode(
+      this.state.scene.disconnectEdge(
         this.state.currentNode, this.state.previousNode);
       this.setState({scene: this.state.scene});
     }
