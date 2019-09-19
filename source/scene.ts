@@ -2,7 +2,7 @@ import { Edge } from './edge';
 import { Node } from './node';
 
 export class Scene {
-  constructor(nodes: Node[], edge: Edge[]) {
+  constructor() {
     this._nodes = [];
     this._edges = [];
     this._maxNodeID = 0;
@@ -30,6 +30,20 @@ export class Scene {
         this._nodes.splice(i, 1);
       }
     }
+  }
+
+  public connectNodes(head: Node, tail: Node) {
+    if(this.findEdgeIndexFromEnds(head, tail) >= 0) {
+      return;
+    }
+    const newEdge = new Edge(
+      this._maxEdgeID,
+      `E${this._maxEdgeID}`,
+      tail,
+      head
+    );
+    this._edges.push(newEdge);
+    ++this._maxEdgeID;
   }
 
   public disconnectEdge(head: Node, tail: Node) {
@@ -65,20 +79,6 @@ export class Scene {
     if(head !== null) {
       this.edges[index].head = head;
     }
-  }
-
-  public connectNodes(head: Node, tail: Node) {
-    if(this.findEdgeIndexFromEnds(head, tail) >= 0) {
-      return;
-    }
-    const newEdge = new Edge(
-      this._maxEdgeID,
-      `E${this._maxEdgeID}`,
-      tail,
-      head
-    );
-    this._edges.push(newEdge);
-    ++this._maxEdgeID;
   }
 
   private findEdgeIndexFromEnds(head: Node, tail: Node): number {

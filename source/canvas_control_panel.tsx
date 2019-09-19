@@ -17,7 +17,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      scene: new Scene([], []),
+      scene: new Scene(),
       currentEdge: null,
       currentNode: null,
       previousNode: null
@@ -27,7 +27,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   public render(): JSX.Element {
     return (
       <div style={CanvasControlPanel.STYLES.wrapper}>
-                <div style={CanvasControlPanel.STYLES.controlPanel}>
+        <div style={CanvasControlPanel.STYLES.controlPanel}>
           <button onClick={this.addNode.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
             Add Node
@@ -70,7 +70,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             currentNode={this.state.currentNode}
             selectedEdge={this.state.currentEdge}
             onNodeSelected={this.newCurrentNodeSelected.bind(this)}
-            onClearNodes={this.clearSelectedNodes.bind(this)}
+            onClearNodes={this.clearSelected.bind(this)}
             onEdgeSelected={this.newEdgeSelected.bind(this)}
             ref={(thing) => this.canvasRef = thing}/>
           <EdgeEditor
@@ -96,7 +96,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     });
   }
 
-  private clearSelectedNodes() {
+  private clearSelected() {
     this.setState({
       currentEdge: null,
       previousNode: null,
@@ -199,8 +199,6 @@ export class CanvasControlPanel extends React.Component<{}, State> {
       this.state.currentEdge, this.state.currentNode, this.state.previousNode);
     this.setState({scene: this.state.scene});
   }
-
-  private canvasRef: Canvas;
 
   private static readonly STYLES = {
     wrapper: {
