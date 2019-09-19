@@ -5,6 +5,7 @@ import { EdgeEditor } from './edge_editor';
 import { Node } from './node';
 import { NodeEditor } from './node_editor';
 import { Scene } from './scene';
+import { NewTransitionForm } from './new_transition_form';
 
 interface State {
   scene: Scene;
@@ -80,6 +81,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             node={this.state.currentNode}
             submitUpdatedNode={this.nodeValuesUpdated.bind(this)}/>
         </div>
+        <NewTransitionForm />
       </div>);
   }
 
@@ -104,7 +106,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     });
   }
 
-  private nodeValuesUpdated(name: string, color: string, code: string) {sdfdsfdsf
+  private nodeValuesUpdated(name: string, color: string, code: string) {
     if(name !== this.state.currentNode.name) {
       this.state.currentNode.name = name;
     }
