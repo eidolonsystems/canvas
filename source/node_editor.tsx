@@ -3,7 +3,7 @@ import { Node } from './node';
 
 interface Properties {
   node: Node;
-  submitUpdatedNode?: (name: string, color: string) => void;
+  submitUpdatedNode?: (name: string, color: string, code: string) => void;
 }
 
 export class NodeEditor extends React.Component<Properties> {
@@ -22,6 +22,11 @@ export class NodeEditor extends React.Component<Properties> {
         <label style={NodeEditor.STYLES.label}>color:</label>
         <input type='text' ref={(thing) => this.colorInputRef = thing}></input>
       </div>
+      <div style={NodeEditor.STYLES.center}>
+        <label style={NodeEditor.STYLES.label}>code:</label>
+        <textarea style={NodeEditor.STYLES.bigTextBox}
+          ref={(thing) => this.codeInputRef = thing}/>
+      </div>
       <button style={NodeEditor.STYLES.button}
           onClick={this.onSubmit.bind(this)}>
         Save Changes
@@ -34,17 +39,20 @@ export class NodeEditor extends React.Component<Properties> {
     if(this.props.node !== null) {
     this.nameInputRef.value = this.props.node.name;
     this.colorInputRef.value = this.props.node.color;
+    this.codeInputRef.value = this.props.node.code;
     }
   }
 
   private onSubmit() {
     this.props.submitUpdatedNode(
       this.nameInputRef.value.toString(),
-      this.colorInputRef.value.toString());
+      this.colorInputRef.value.toString(),
+      this.codeInputRef.value.toString());
   }
 
   private nameInputRef: HTMLInputElement;
   private colorInputRef: HTMLInputElement;
+  private codeInputRef: HTMLTextAreaElement;
   private static readonly STYLES = {
     hidden: {
       display: 'none' as 'none'
@@ -63,6 +71,10 @@ export class NodeEditor extends React.Component<Properties> {
     },
     label: {
       paddingRight: '20px'
+    },
+    bigTextBox: {
+      height: '100px',
+      width: '450px'
     },
     button: {
       width: '180px'

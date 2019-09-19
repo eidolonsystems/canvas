@@ -104,12 +104,15 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     });
   }
 
-  private nodeValuesUpdated(name: string, color: string) {
-    if(name !== '') {
+  private nodeValuesUpdated(name: string, color: string, code: string) {sdfdsfdsf
+    if(name !== this.state.currentNode.name) {
       this.state.currentNode.name = name;
     }
-    if(color !== '') {
+    if(color !== this.state.currentNode.color) {
       this.state.currentNode.color = color;
+    }
+    if(code !== this.state.currentNode.code) {
+      this.state.currentNode.code = code;
     }
     this.setState({currentNode: this.state.currentNode});
   }
