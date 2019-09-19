@@ -32,7 +32,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
               style={CanvasControlPanel.STYLES.button}>
             Add Node
           </button>
-          <button onClick={this.removeNode.bind(this)}
+          <button onClick={this.deleteNode.bind(this)}
               style={CanvasControlPanel.STYLES.button}>
             Delete Node
           </button>
@@ -48,13 +48,16 @@ export class CanvasControlPanel extends React.Component<{}, State> {
               style={CanvasControlPanel.STYLES.button}>
             Delete Edge
           </button>
-          <button>
-            Make Head
+          <button onClick={this.makeHead.bind(this)}
+            style={CanvasControlPanel.STYLES.altButton}>
+            Make Current Node Head
           </button>
-          <button>
-            Make Tail
+          <button onClick={this.makeTail.bind(this)}
+            style={CanvasControlPanel.STYLES.altButton}>
+            Make Current Node Tail
           </button>
-          <button>
+          <button onClick={this.changeEnds.bind(this)}
+            style={CanvasControlPanel.STYLES.altButton}>
             Change Ends
           </button>
         </div>
@@ -134,7 +137,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     this.setState({scene: this.state.scene});
   }
 
-  private removeNode() {
+  private deleteNode() {
     this.state.scene.deleteNode(this.state.currentNode);
     this.setState({
       currentNode: null,
@@ -168,6 +171,33 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   private deleteEdge() {
     this.state.scene.deleteEdge(this.state.currentEdge);
     this.setState({currentEdge: null});
+  }
+
+  private makeHead() {
+    if(this.state.currentEdge === null) {
+      return;
+    }
+    this.state.scene.changeEnds(
+      this.state.currentEdge, this.state.currentNode, null);
+    this.setState({scene: this.state.scene});
+  }
+
+  private makeTail() {
+    if(this.state.currentEdge === null) {
+      return;
+    }
+    this.state.scene.changeEnds(
+      this.state.currentEdge, null, this.state.currentNode);
+    this.setState({scene: this.state.scene});
+  }
+
+  private changeEnds() {
+    if(this.state.currentEdge === null) {
+      return;
+    }
+    this.state.scene.changeEnds(
+      this.state.currentEdge, this.state.currentNode, this.state.previousNode);
+    this.setState({scene: this.state.scene});
   }
 
   private canvasRef: Canvas;

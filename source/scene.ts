@@ -46,6 +46,27 @@ export class Scene {
     }
   }
 
+  public changeEnds(edge: Edge, head: Node, tail: Node) {
+    const index = this.findEdgeIndexFromEdge(edge);
+    let i = -1;
+    if(head === null) {
+      i = this.findEdgeIndexFromEnds(this.edges[index].head, tail);
+    } else if(tail == null) {
+     i = this.findEdgeIndexFromEnds(head, this.edges[index].tail);
+    } else {
+      i = this.findEdgeIndexFromEnds(head, tail);
+    }
+    if(i >= 0) {
+      return;
+    }
+    if(tail !== null) {
+      this.edges[index].tail = tail;
+    }
+    if(head !== null) {
+      this.edges[index].head = head;
+    }
+  }
+
   public connectNodes(head: Node, tail: Node) {
     if(this.findEdgeIndexFromEnds(head, tail) >= 0) {
       return;
