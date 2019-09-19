@@ -11,6 +11,7 @@ export class Node {
     this._name = name;
     this._color = color;
     this._position = position;
+    this._code = '';
   }
 
   public get id(): number {
@@ -41,8 +42,17 @@ export class Node {
     this._position = newPosition;
   }
 
+  public get code(): string {
+    return this._code;
+  }
+
+  public set code(newCode: string) {
+    this._code = newCode;
+  }
+
   private _id: number;
   private _name: string;
   private _color: string;
   private _position: Position;
+  private _code: string;
 }

@@ -1,10 +1,12 @@
 import { Edge } from './edge';
 import { Node } from './node';
+import { Transition } from './transition';
 
 export class Scene {
   constructor() {
     this._nodes = [];
     this._edges = [];
+    this._transitions = [];
     this._maxNodeID = 0;
     this._maxEdgeID = 0;
   }
@@ -113,6 +115,7 @@ export class Scene {
 
   private _nodes: Node[];
   private _edges: Edge[];
+  private _transitions: Transition[]
   private _maxNodeID: number;
   private _maxEdgeID: number;
 }
