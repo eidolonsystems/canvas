@@ -17,11 +17,20 @@ export class Scene {
     return this._edges.slice();
   }
 
-  public addNode(node: Node): void {
-    node.id = this._maxNodeID;
-    node.name = `s${node.id}`;
-    this._nodes.push(node);
+  public addNode(): void {
+    const red = Math.floor(Math.random() * Math.floor(150));
+    const green = Math.floor(Math.random() * Math.floor(100));
+    const blue = Math.floor(Math.random() * Math.floor(250));
+    const someX = Math.floor(Math.random() * Math.floor(500));
+    const someY = Math.floor(Math.random() * Math.floor(500));
+    const newNode = new Node(
+      this._maxNodeID,
+      `s${this._maxNodeID}`,
+      `rgb(${red}, ${130 + green}, ${20 + blue})`,
+      {x: someX, y: someY}
+    );
     ++this._maxNodeID;
+    this._nodes.push(newNode);
   }
 
   public deleteNode(nodeToRemove: Node): void {
@@ -34,6 +43,7 @@ export class Scene {
 
   public connectNodes(head: Node, tail: Node) {
     if(this.findEdgeIndexFromEnds(head, tail) >= 0) {
+      console.log('not connecting!');
       return;
     }
     const newEdge = new Edge(

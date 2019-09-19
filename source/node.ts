@@ -7,7 +7,7 @@ export interface Position {
 
 export class Node {
   constructor(id: number, name: string, color: string, position: Position) {
-    this._id;
+    this._id = id;
     this._name = name;
     this._color = color;
     this._position = position;
@@ -15,10 +15,6 @@ export class Node {
 
   public get id(): number {
     return this._id;
-  }
-
-  public set id(newID: number) {
-    this._id = newID;
   }
 
   public get name(): string {

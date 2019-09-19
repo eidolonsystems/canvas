@@ -72,7 +72,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             onNodeSelected={this.newCurrentNodeSelected.bind(this)}
             onClearNodes={this.clearSelected.bind(this)}
             onEdgeSelected={this.newEdgeSelected.bind(this)}
-            ref={(thing) => this.canvasRef = thing}/>
+            />
           <EdgeEditor
             edge={this.state.currentEdge}
             submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>
@@ -122,18 +122,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   }
 
   private addNode() {
-    const red = Math.floor(Math.random() * Math.floor(150));
-    const green = Math.floor(Math.random() * Math.floor(100));
-    const blue = Math.floor(Math.random() * Math.floor(250));
-    const someX = Math.floor(Math.random() * Math.floor(500));
-    const someY = Math.floor(Math.random() * Math.floor(500));
-    const newNode = new Node(
-      0,
-      'new',
-      `rgb(${red}, ${130 + green}, ${20 + blue})`,
-      {x: someX, y: someY}
-    );
-    this.state.scene.addNode(newNode);
+    this.state.scene.addNode();
     this.setState({scene: this.state.scene});
   }
 

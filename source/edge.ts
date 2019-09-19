@@ -12,10 +12,6 @@ export class Edge {
     return this._id;
   }
 
-  public set id(newID: number) {
-    this._id = newID;
-  }
-
   public get name(): string {
     return this._name;
   }
