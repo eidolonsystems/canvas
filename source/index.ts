@@ -6,3 +6,6 @@ export * from './new_transition_form';
 export * from './node';
 export * from './node_editor';
 export * from './scene';
+export * from './transition_list';
+export * from './transition_entry';
+export * from './transition';

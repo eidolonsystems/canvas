@@ -1,4 +1,5 @@
 import { Node } from './node';
+import { Transition } from './transition';
 
 export class Edge {
   constructor(id: number, name: string, tail: Node, head: Node) {
@@ -6,6 +7,7 @@ export class Edge {
     this._name = name;
     this._tail = tail;
     this._head = head;
+    this._transitions = [];
   }
 
   public get id(): number {
@@ -36,8 +38,15 @@ export class Edge {
     this._tail = newTail;
   }
 
+  public addTransition() {
+  }
+
+  public removeTransition() {
+  }
+
   private _id: number;
   private _name: string;
   private _tail: Node;
   private _head: Node;
+  private _transitions: number[];
 }

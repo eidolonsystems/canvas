@@ -5,7 +5,9 @@ import { EdgeEditor } from './edge_editor';
 import { Node } from './node';
 import { NodeEditor } from './node_editor';
 import { Scene } from './scene';
+import { TransitionType } from './transition';
 import { NewTransitionForm } from './new_transition_form';
+import { TransitionList } from './transition_list';
 
 interface State {
   scene: Scene;
@@ -26,6 +28,17 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   }
 
   public render(): JSX.Element {
+    const editor = (() => {
+      if(this.state.currentEdge !== null) {
+        return (<EdgeEditor
+          edge={this.state.currentEdge}
+          submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>);
+      } else {
+         return (<NodeEditor
+          node={this.state.currentNode}
+          submitUpdatedNode={this.nodeValuesUpdated.bind(this)}/>);
+      }
+    })();
     return (
       <div style={CanvasControlPanel.STYLES.wrapper}>
         <div style={CanvasControlPanel.STYLES.controlPanel}>
@@ -74,14 +87,13 @@ export class CanvasControlPanel extends React.Component<{}, State> {
             onClearNodes={this.clearSelected.bind(this)}
             onEdgeSelected={this.newEdgeSelected.bind(this)}
             />
-          <EdgeEditor
-            edge={this.state.currentEdge}
-            submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>
-          <NodeEditor
-            node={this.state.currentNode}
-            submitUpdatedNode={this.nodeValuesUpdated.bind(this)}/>
+          {editor}
         </div>
-        <NewTransitionForm />
+        <div>
+          <NewTransitionForm
+            submit={this.submitTransition.bind(this)}/>
+          <TransitionList transitions={this.state.scene.transitions}/>
+        </div>
       </div>);
   }
 
@@ -191,6 +203,12 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     }
     this.state.scene.changeEnds(
       this.state.currentEdge, this.state.currentNode, this.state.previousNode);
+    this.setState({scene: this.state.scene});
+  }
+
+  private submitTransition(type: TransitionType, name: string, code: string) {
+    console.log('BEEEP');
+    this.state.scene.addTransition(type, name, code);
     this.setState({scene: this.state.scene});
   }
 

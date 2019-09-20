@@ -1,6 +1,6 @@
 import { Edge } from './edge';
 import { Node } from './node';
-import { Transition } from './transition';
+import { Transition, TransitionType } from './transition';
 
 export class Scene {
   constructor() {
@@ -9,6 +9,7 @@ export class Scene {
     this._transitions = [];
     this._maxNodeID = 0;
     this._maxEdgeID = 0;
+    this._maxTransition = 0;
   }
 
   public get nodes(): Node[] {
@@ -17,6 +18,10 @@ export class Scene {
 
   public get edges(): Edge[] {
     return this._edges.slice();
+  }
+
+  public get transitions(): Transition[] {
+    return this._transitions.slice();
   }
 
   public addNode(): void {
@@ -93,6 +98,12 @@ export class Scene {
     }
   }
 
+  public addTransition(type: TransitionType, name: string, code: string) {
+    const transition = new Transition(this._maxTransition, type, name, code);
+    this._transitions.push(transition);
+    ++this._maxTransition;
+  }
+
   private findEdgeIndexFromEnds(head: Node, tail: Node): number {
     for(let i = 0; i < this._edges.length; ++i) {
       const edge = this._edges[i];
@@ -115,7 +126,8 @@ export class Scene {
 
   private _nodes: Node[];
   private _edges: Edge[];
-  private _transitions: Transition[]
+  private _transitions: Transition[];
   private _maxNodeID: number;
   private _maxEdgeID: number;
+  private _maxTransition: number;
 }
