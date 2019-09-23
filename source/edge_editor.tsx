@@ -61,13 +61,10 @@ export class EdgeEditor extends React.Component<Properties, State> {
   }
 
   public onTransitionChange(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log('why');
     this.setState({transition: event.target.value});
   }
 
   private onSubmit() {
-    console.log('uhhhh', this.state.transition);
-    console.log(parseInt(this.state.transition, 10));
     this.props.submitUpdatedEdge(
       this.props.edge, this.state.name, parseInt(this.state.transition, 10));
   }

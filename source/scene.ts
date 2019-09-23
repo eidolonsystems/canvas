@@ -54,7 +54,6 @@ export class Scene {
 
   public connectNodes(head: Node, tail: Node) {
     if(this.findEdgeIndexFromEnds(head, tail) >= 0) {
-      console.log('not connecting!');
       return;
     }
     const newEdge = new Edge(
@@ -109,9 +108,6 @@ export class Scene {
   }
 
   public getTransitionByID(id: number): Transition {
-    console.log('geeeettting', id);
-    console.log(this._transitions);
-    console.log(this._transitions.has(id));
     if(this._transitions.has(id)) {
       return this._transitions.get(id);
     } else {
