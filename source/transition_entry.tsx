@@ -37,7 +37,7 @@ export class TransitionEntry extends React.Component<Properties>  {
         </div>
         <div style={TransitionEntry.STYLES.row}>
           <div style={TransitionEntry.STYLES.padding}>{label}:</div>
-          <textarea>{this.props.transition.code}</textarea>
+          <div>{this.props.transition.code}</div>
         </div>
       </div>);
     }
@@ -46,16 +46,20 @@ export class TransitionEntry extends React.Component<Properties>  {
       display: 'flex' as 'flex',
       flexDirection: 'column' as 'column',
       font: '420 12px Arial',
-      marginTop: '2px',
-      marginBottom: '2px',
+      padding: '5px',
+      marginTop: '5px',
+      marginBottom: '5px',
       border: '2px solid #333333'
     },
     row: {
       display: 'flex' as 'flex',
-      flexDirection: 'row' as 'row'
+      flexDirection: 'row' as 'row',
+      paddingTop: '2px',
+      paddingBottom: '2px'
     },
     padding: {
-      marginRight: '50px'
+      marginLeft: '4px',
+      marginRight: '20px'
     }
   };
 }

@@ -32,6 +32,8 @@ export class CanvasControlPanel extends React.Component<{}, State> {
       if(this.state.currentEdge !== null) {
         return (<EdgeEditor
           edge={this.state.currentEdge}
+          transition={
+              this.state.scene.getTransitionByID(this.state.currentEdge.transition)}
           submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>);
       } else {
          return (<NodeEditor
@@ -131,9 +133,13 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     this.setState({currentNode: this.state.currentNode});
   }
 
-  private edgesValueUpdated(edge: Edge, name: string) {
+  private edgesValueUpdated(edge: Edge, name: string, transitionID: number) {
     if(name !== '') {
       edge.name = name;
+    }
+    if(transitionID !== -1 && transitionID !== null) {
+      const id = this.state.scene.getTransitionByID(transitionID);
+      edge.transition = transitionID;
     }
     this.setState({scene: this.state.scene});
   }

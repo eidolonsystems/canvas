@@ -7,7 +7,7 @@ export class Edge {
     this._name = name;
     this._tail = tail;
     this._head = head;
-    this._transitions = [];
+    this._transition = -1;
   }
 
   public get id(): number {
@@ -38,15 +38,21 @@ export class Edge {
     this._tail = newTail;
   }
 
-  public addTransition() {
+  public get transition() {
+    return this._transition;
+  }
+
+  public set transition(id: number) {
+    this._transition = id;
   }
 
   public removeTransition() {
+    this._transition = -1;
   }
 
   private _id: number;
   private _name: string;
   private _tail: Node;
   private _head: Node;
-  private _transitions: number[];
+  private _transition: number;
 }

@@ -6,7 +6,7 @@ export class Scene {
   constructor() {
     this._nodes = [];
     this._edges = [];
-    this._transitions = [];
+    this._transitions = new Map<number, Transition>();
     this._maxNodeID = 0;
     this._maxEdgeID = 0;
     this._maxTransition = 0;
@@ -21,7 +21,11 @@ export class Scene {
   }
 
   public get transitions(): Transition[] {
-    return this._transitions.slice();
+    const thing = [] as Transition[];
+    for(const transition of this._transitions.values()) {
+      thing.push(transition);
+    }
+    return thing;
   }
 
   public addNode(): void {
@@ -100,10 +104,20 @@ export class Scene {
 
   public addTransition(type: TransitionType, name: string, code: string) {
     const transition = new Transition(this._maxTransition, type, name, code);
-    this._transitions.push(transition);
+    this._transitions.set(this._maxTransition, transition);
     ++this._maxTransition;
   }
 
+  public getTransitionByID(id: number): Transition {
+    console.log('geeeettting', id);
+    console.log(this._transitions);
+    console.log(this._transitions.has(id));
+    if(this._transitions.has(id)) {
+      return this._transitions.get(id);
+    } else {
+      return null;
+    }
+  }
   private findEdgeIndexFromEnds(head: Node, tail: Node): number {
     for(let i = 0; i < this._edges.length; ++i) {
       const edge = this._edges[i];
@@ -126,7 +140,7 @@ export class Scene {
 
   private _nodes: Node[];
   private _edges: Edge[];
-  private _transitions: Transition[];
+  private _transitions: Map<number, Transition>;
   private _maxNodeID: number;
   private _maxEdgeID: number;
   private _maxTransition: number;

@@ -10,7 +10,7 @@ export class TransitionList extends React.Component<Properties>  {
   public render(): JSX.Element {
     const thing = [];
     for(const transiton of this.props.transitions) {
-      thing.push(<TransitionEntry transition={transiton}/>);
+      thing.push(<TransitionEntry transition={transiton} key={transiton.id}/>);
     }
     return(
       <div style={TransitionList.STYLES.wrapper}>

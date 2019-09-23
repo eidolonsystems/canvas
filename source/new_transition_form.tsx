@@ -29,6 +29,7 @@ export class NewTransitionForm  extends React.Component<Properties, State> {
          return 'Code';
       }
     })();
+
     return (
       <div style={NewTransitionForm.STYLES.wrapper}>
         <div>New Transition</div>
@@ -96,7 +97,8 @@ export class NewTransitionForm  extends React.Component<Properties, State> {
       margin: '10px',
       display: 'flex' as 'flex',
       flexDirection: 'column' as 'column',
-      border: '2px solid #333333'
+      border: '2px solid #333333',
+      width: '500px'
     },
     code: {
       width: '450px'
