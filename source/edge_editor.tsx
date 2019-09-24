@@ -18,11 +18,10 @@ export class EdgeEditor extends React.Component<Properties, State> {
   constructor(props: Properties) {
     super(props);
     this.state = {
-      name: this.props.edge.name,
+      name: this.props.edge.getLabel(),
       transition: ''
     };
 
-    this.onNameChange = this.onNameChange.bind(this);
     this.onTransitionChange = this.onTransitionChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -36,9 +35,7 @@ export class EdgeEditor extends React.Component<Properties, State> {
             <div style={EdgeEditor.STYLES.center}>{'Edge Editor'}</div>
             <div style={EdgeEditor.STYLES.center}>
               <label style={EdgeEditor.STYLES.label}>name:</label>
-              <input type='text' value={this.state.name}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                this.onNameChange(e)}/>
+              <div>{this.props.edge.id}</div>
             </div>
               <div style={EdgeEditor.STYLES.center}>
               <label style={EdgeEditor.STYLES.label}>transitons:</label>
@@ -54,10 +51,6 @@ export class EdgeEditor extends React.Component<Properties, State> {
           <TransitionEditor transiton={this.props.transition}/>
         </div>);
     }
-  }
-
-  public onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({name: event.target.value});
   }
 
   public onTransitionChange(event: React.ChangeEvent<HTMLInputElement>) {

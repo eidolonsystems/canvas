@@ -140,7 +140,7 @@ export class Canvas extends React.Component<Properties, State> {
     ctx.stroke();
     ctx.font = '12px Arial';
     ctx.fillStyle = 'black';
-    ctx.fillText(edge.name, loopCenter.x + 5, loopCenter.y + 5);
+    ctx.fillText(edge.getLabel(), loopCenter.x + 5, loopCenter.y + 5);
     ctx.closePath();
     this.drawTriangleForLoop(edge, edge.head.position, intersection);
   }
@@ -167,7 +167,7 @@ export class Canvas extends React.Component<Properties, State> {
     };
     ctx.font = '500 14px Arial';
     ctx.fillStyle = 'black';
-    ctx.fillText(edge.name, labelPoint.x, labelPoint.y);
+    ctx.fillText(edge.getLabel(), labelPoint.x, labelPoint.y);
     endPoint = {
       x: tail.x + (intersection * unitVector.x),
       y: tail.y + (intersection * unitVector.y)
@@ -304,7 +304,7 @@ export class Canvas extends React.Component<Properties, State> {
       };
       const vector2 = {
         x: triangle.point3.x - origin.x,
-        y: triangle.point3.y - origin.y,
+        y: triangle.point3.y - origin.y
       };
       const a = (this.determinant(mysteryPoint, vector2) -
         this.determinant(origin, vector2)) /

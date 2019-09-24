@@ -134,9 +134,6 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   }
 
   private edgesValueUpdated(edge: Edge, name: string, transitionID: number) {
-    if(name !== '') {
-      edge.name = name;
-    }
     if(transitionID !== -1 && transitionID !== null) {
       const id = this.state.scene.getTransitionByID(transitionID);
       edge.transition = transitionID;

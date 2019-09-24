@@ -2,9 +2,8 @@ import { Node } from './node';
 import { Transition } from './transition';
 
 export class Edge {
-  constructor(id: number, name: string, tail: Node, head: Node) {
+  constructor(id: number, tail: Node, head: Node) {
     this._id = id;
-    this._name = name;
     this._tail = tail;
     this._head = head;
     this._transition = -1;
@@ -14,12 +13,8 @@ export class Edge {
     return this._id;
   }
 
-  public get name(): string {
-    return this._name;
-  }
-
-  public set name(newName: string) {
-    this._name = newName;
+  public getLabel(): string {
+    return this._id.toString();
   }
 
   public get head(): Node {
@@ -51,7 +46,6 @@ export class Edge {
   }
 
   private _id: number;
-  private _name: string;
   private _tail: Node;
   private _head: Node;
   private _transition: number;
