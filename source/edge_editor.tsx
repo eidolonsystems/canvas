@@ -81,7 +81,7 @@ export class EdgeEditor extends React.Component<Properties, State> {
       alignItems: 'center' as 'center'
     },
     center: {
-      paddingBottom: '15px',
+      paddingBottom: '10px',
       display: 'flex' as 'flex',
       flexDirection: 'row' as 'row',
       justifyContent: 'center' as 'center'
