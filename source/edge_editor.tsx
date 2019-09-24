@@ -7,6 +7,8 @@ interface Properties {
   edge: Edge;
   transition?: Transition | null;
   submitUpdatedEdge?: (edge: Edge, name: string, transitionID: number) => void;
+  submitUpdatedTransitin?: (
+    transition: Transition, name: string, code: string) => void;
 }
 
 interface State {
@@ -48,7 +50,8 @@ export class EdgeEditor extends React.Component<Properties, State> {
               Save Changes
             </button>
           </div>
-          <TransitionEditor transiton={this.props.transition}/>
+          <TransitionEditor transiton={this.props.transition}
+          submitUpdatedTransitin={this.props.submitUpdatedTransitin}/>
         </div>);
     }
   }

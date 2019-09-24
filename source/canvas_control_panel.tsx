@@ -5,7 +5,7 @@ import { EdgeEditor } from './edge_editor';
 import { Node } from './node';
 import { NodeEditor } from './node_editor';
 import { Scene } from './scene';
-import { TransitionType } from './transition';
+import { TransitionType, Transition } from './transition';
 import { NewTransitionForm } from './new_transition_form';
 import { TransitionList } from './transition_list';
 
@@ -32,9 +32,10 @@ export class CanvasControlPanel extends React.Component<{}, State> {
       if(this.state.currentEdge !== null) {
         return (<EdgeEditor
           edge={this.state.currentEdge}
-          transition={
-              this.state.scene.getTransitionByID(this.state.currentEdge.transition)}
-          submitUpdatedEdge={this.edgesValueUpdated.bind(this)}/>);
+          transition={this.state.currentEdge.transition}
+          submitUpdatedEdge={this.edgesValueUpdated.bind(this)}
+          submitUpdatedTransitin={this.submitTransitionChange.bind(this)}
+          />);
       } else {
          return (<NodeEditor
           node={this.state.currentNode}
@@ -138,7 +139,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   private edgesValueUpdated(edge: Edge, name: string, transitionID: number) {
     if(transitionID !== -1 && transitionID !== null) {
       const id = this.state.scene.getTransitionByID(transitionID);
-      edge.transition = transitionID;
+      edge.transition = id;
     }
     this.setState({scene: this.state.scene});
   }
@@ -216,8 +217,18 @@ export class CanvasControlPanel extends React.Component<{}, State> {
     this.setState({scene: this.state.scene});
   }
 
+  private submitTransitionChange(
+      transition: Transition, name: string, code: string): void {
+    if(name !== '') {
+      transition.name = name;
+    }
+    if(code !== '') {
+      transition.code = code;
+    }
+    this.setState({scene: this.state.scene});
+  }
+
   private deleteTransition(id: number) {
-    console.log('DEEELEEEETTTEEE');
     this.state.scene.deleteTransition(id);
     this.setState({scene: this.state.scene});
   }

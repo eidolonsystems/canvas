@@ -28,7 +28,7 @@ export class TransitionEntry extends React.Component<Properties>  {
           <div style={TransitionEntry.STYLES.padding}>{'id:'}</div>
           <div>{this.props.transition.id}</div>
           <div style={TransitionEntry.STYLES.close}
-              onClick = {() => {this.props.delete(this.props.transition.id)}}>
+              onClick = {() => {this.props.delete(this.props.transition.id);}}>
             {'X'}
           </div>
         </div>

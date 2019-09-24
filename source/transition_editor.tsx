@@ -3,6 +3,8 @@ import { TransitionType, Transition } from './transition';
 
 interface Properties {
   transiton: Transition;
+  submitUpdatedTransitin?: (
+    transition: Transition, name: string, code: string) => void;
 }
 
 interface State {
@@ -79,7 +81,11 @@ export class TransitionEditor  extends React.Component<Properties, State> {
           <textarea value={this.state.code} onChange={this.onCodeChange}/>
         </div>
         <div>
-          <button> {'Save Changes'} </button>
+          <button
+            onClick={() => this.props.submitUpdatedTransitin(
+              this.props.transiton, this.state.name, this.state.code)}>
+              {'Save Changes'}
+          </button>
         </div>
       </div>
     );
