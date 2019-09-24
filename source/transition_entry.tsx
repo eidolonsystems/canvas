@@ -3,6 +3,7 @@ import { Transition, TransitionType } from './transition';
 
 interface Properties {
   transition: Transition;
+  delete?: (id: number) => void;
 }
 
 export class TransitionEntry extends React.Component<Properties>  {
@@ -26,6 +27,10 @@ export class TransitionEntry extends React.Component<Properties>  {
         <div style={TransitionEntry.STYLES.row}>
           <div style={TransitionEntry.STYLES.padding}>{'id:'}</div>
           <div>{this.props.transition.id}</div>
+          <div style={TransitionEntry.STYLES.close}
+              onClick = {() => {this.props.delete(this.props.transition.id)}}>
+            {'X'}
+          </div>
         </div>
         <div style={TransitionEntry.STYLES.row}>
           <div style={TransitionEntry.STYLES.padding}>{'type:'}</div>
@@ -60,6 +65,14 @@ export class TransitionEntry extends React.Component<Properties>  {
     padding: {
       marginLeft: '4px',
       marginRight: '20px'
+    },
+    close: {
+      color: '#ff032d',
+      font: '800 12px Arial',
+      display: 'flex' as 'flex',
+      flexDirection: 'row' as 'row',
+      flexGrow: 1,
+      justifyContent: 'flex-end' as 'flex-end'
     }
   };
 }

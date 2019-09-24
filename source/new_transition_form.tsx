@@ -65,12 +65,20 @@ export class NewTransitionForm  extends React.Component<Properties, State> {
           onChange={this.onCodeChange.bind(this)}
           style={NewTransitionForm.STYLES.padding}/>
         <button style={NewTransitionForm.STYLES.padding}
-          onClick={() =>
-            this.props.submit(this.state.selectedType, this.state.name, this.state.code)}>
+          onClick={this.onSubmit.bind(this)}>
           {'Add New Transition'}
         </button>
       </div>
     );
+  }
+
+  private onSubmit() {
+    this.props.submit(this.state.selectedType,
+      this.state.name, this.state.code);
+    this.setState({
+        name: '',
+        code: ''
+    });
   }
 
   private radioButtonChange(value: TransitionType) {

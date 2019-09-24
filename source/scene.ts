@@ -106,6 +106,10 @@ export class Scene {
     ++this._maxTransition;
   }
 
+  public deleteTransition(id: number): void {
+    this._transitions.delete(id);
+  }
+
   public getTransitionByID(id: number): Transition {
     if(this._transitions.has(id)) {
       return this._transitions.get(id);

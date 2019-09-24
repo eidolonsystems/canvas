@@ -4,13 +4,18 @@ import { TransitionEntry } from './transition_entry';
 
 interface Properties {
   transitions: Transition[];
+  delete?: (id: number) => void;
 }
 
 export class TransitionList extends React.Component<Properties>  {
   public render(): JSX.Element {
     const thing = [];
     for(const transiton of this.props.transitions) {
-      thing.push(<TransitionEntry transition={transiton} key={transiton.id}/>);
+      thing.push(
+      <TransitionEntry
+        transition={transiton}
+        key={transiton.id}
+        delete={this.props.delete}/>);
     }
     return(
       <div style={TransitionList.STYLES.wrapper}>

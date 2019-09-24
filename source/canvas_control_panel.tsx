@@ -94,7 +94,9 @@ export class CanvasControlPanel extends React.Component<{}, State> {
         <div>
           <NewTransitionForm
             submit={this.submitTransition.bind(this)}/>
-          <TransitionList transitions={this.state.scene.transitions}/>
+          <TransitionList
+            delete={this.deleteTransition.bind(this)}
+            transitions={this.state.scene.transitions}/>
         </div>
       </div>);
   }
@@ -210,8 +212,13 @@ export class CanvasControlPanel extends React.Component<{}, State> {
   }
 
   private submitTransition(type: TransitionType, name: string, code: string) {
-    console.log('BEEEP');
     this.state.scene.addTransition(type, name, code);
+    this.setState({scene: this.state.scene});
+  }
+
+  private deleteTransition(id: number) {
+    console.log('DEEELEEEETTTEEE');
+    this.state.scene.deleteTransition(id);
     this.setState({scene: this.state.scene});
   }
 
