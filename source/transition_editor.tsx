@@ -3,7 +3,7 @@ import { TransitionType, Transition } from './transition';
 
 interface Properties {
   transiton: Transition;
-  submitUpdatedTransitin?: (
+  submitUpdatedTransition?: (
     transition: Transition, name: string, code: string) => void;
 }
 
@@ -82,7 +82,7 @@ export class TransitionEditor  extends React.Component<Properties, State> {
         </div>
         <div>
           <button
-            onClick={() => this.props.submitUpdatedTransitin(
+            onClick={() => this.props.submitUpdatedTransition(
               this.props.transiton, this.state.name, this.state.code)}>
               {'Save Changes'}
           </button>
@@ -122,9 +122,6 @@ export class TransitionEditor  extends React.Component<Properties, State> {
     },
     label: {
       paddingRight: '20px'
-    },
-    centered: {
-
     }
   };
 }

@@ -7,7 +7,7 @@ interface Properties {
   edge: Edge;
   transition?: Transition | null;
   submitUpdatedEdge?: (edge: Edge, name: string, transitionID: number) => void;
-  submitUpdatedTransitin?: (
+  submitUpdatedTransition?: (
     transition: Transition, name: string, code: string) => void;
 }
 
@@ -40,7 +40,7 @@ export class EdgeEditor extends React.Component<Properties, State> {
               <div>{this.props.edge.id}</div>
             </div>
               <div style={EdgeEditor.STYLES.center}>
-              <label style={EdgeEditor.STYLES.label}>transitons:</label>
+              <label style={EdgeEditor.STYLES.label}>transiton:</label>
               <input type='number' value={this.state.transition}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   this.onTransitionChange(e)}/>
@@ -51,7 +51,7 @@ export class EdgeEditor extends React.Component<Properties, State> {
             </button>
           </div>
           <TransitionEditor transiton={this.props.transition}
-          submitUpdatedTransitin={this.props.submitUpdatedTransitin}/>
+          submitUpdatedTransition={this.props.submitUpdatedTransition}/>
         </div>);
     }
   }
@@ -65,7 +65,6 @@ export class EdgeEditor extends React.Component<Properties, State> {
       this.props.edge, this.state.name, parseInt(this.state.transition, 10));
   }
 
-  private nameInputRef: HTMLInputElement;
   private static readonly STYLES = {
     hidden: {
       display: 'none' as 'none'

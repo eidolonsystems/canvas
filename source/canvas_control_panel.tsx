@@ -34,7 +34,7 @@ export class CanvasControlPanel extends React.Component<{}, State> {
           edge={this.state.currentEdge}
           transition={this.state.currentEdge.transition}
           submitUpdatedEdge={this.edgesValueUpdated.bind(this)}
-          submitUpdatedTransitin={this.submitTransitionChange.bind(this)}
+          submitUpdatedTransition={this.submitTransitionChange.bind(this)}
           />);
       } else {
          return (<NodeEditor
