@@ -1,10 +1,10 @@
 
 export enum TransitionType {
   Event,
-  Conditionon
+  Condition
 }
 
-export class Transition {
+export abstract class Transition {
   constructor(id: number, type: TransitionType, name: string, code: string) {
     this._id = id;
     this._type = type;

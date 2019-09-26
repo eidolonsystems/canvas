@@ -1,6 +1,8 @@
 import { Edge } from './edge';
 import { Node } from './node';
 import { Transition, TransitionType } from './transition';
+import { Condition } from './condition';
+import { Event } from './event';
 
 export class Scene {
   constructor() {
@@ -101,7 +103,12 @@ export class Scene {
   }
 
   public addTransition(type: TransitionType, name: string, code: string) {
-    const transition = new Transition(this._maxTransition, type, name, code);
+    let transition;
+    if(type === TransitionType.Event) {
+      transition = new Condition(this._maxTransition, name, code);
+    } else {
+      transition = new Event(this._maxTransition, name, '', code);
+    }
     this._transitions.set(this._maxTransition, transition);
     ++this._maxTransition;
   }

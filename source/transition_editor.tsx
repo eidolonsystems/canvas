@@ -10,6 +10,7 @@ interface Properties {
 interface State {
   name: string;
   code: string;
+  parameter: string;
 }
 
 export class TransitionEditor  extends React.Component<Properties, State> {
@@ -17,7 +18,8 @@ export class TransitionEditor  extends React.Component<Properties, State> {
     super(props);
     this.state = {
       name: '',
-      code: ''
+      code: '',
+      parameter: ''
     };
     this.onNameChange = this.onNameChange.bind(this);
     this.onCodeChange = this.onCodeChange.bind(this);
@@ -47,14 +49,28 @@ export class TransitionEditor  extends React.Component<Properties, State> {
       return <div style={TransitionEditor.STYLES.hidden}/>;
     }
     const type = (() => {
-      if(this.props.transiton.type === TransitionType.Conditionon) {
+      if(this.props.transiton.type === TransitionType.Condition) {
         return 'condition';
       } else {
           return 'event';
       }
     })();
+    const parameters = (() => {
+      if(this.props.transiton.type === TransitionType.Event) {
+        return (
+          <div>
+          <div>{'parameters:'}</div>
+          <input type='text' value={this.state.parameter}
+            onChange={this.onParameterChange.bind(this)}/>
+        </div>
+        );
+      } else {
+        return null;
+      }
+    })();
+    {parameters}
     const codeLabel = (() => {
-      if(this.props.transiton.type === TransitionType.Conditionon) {
+      if(this.props.transiton.type === TransitionType.Condition) {
         return 'predicate:';
       } else {
          return 'code:';
@@ -100,6 +116,12 @@ export class TransitionEditor  extends React.Component<Properties, State> {
   private onNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
       name: event.target.value
+    });
+  }
+
+  private onParameterChange(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({
+      parameter: event.target.value
     });
   }
 

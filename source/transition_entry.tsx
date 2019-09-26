@@ -9,14 +9,14 @@ interface Properties {
 export class TransitionEntry extends React.Component<Properties>  {
   public render(): JSX.Element {
     const type = (() => {
-      if(this.props.transition.type === TransitionType.Conditionon) {
+      if(this.props.transition.type === TransitionType.Condition) {
         return 'condition';
       } else {
          return 'event';
       }
     })();
     const label = (() => {
-      if(this.props.transition.type === TransitionType.Conditionon) {
+      if(this.props.transition.type === TransitionType.Condition) {
         return 'predicate';
       } else {
          return 'code';

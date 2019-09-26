@@ -14,6 +14,9 @@ export class Edge {
   }
 
   public getLabel(): string {
+    if(this._transition !== null) {
+      return this._transition.name;
+    }
     return this._id.toString();
   }
 
